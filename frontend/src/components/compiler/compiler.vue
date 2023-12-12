@@ -46,8 +46,18 @@ import http from "../../http-common"
                 console.log(this.input);
             },
             compileCode(){
-                this.output='Загрузка...'
                 const answer = document.getElementById("answer");
+                if(this.selected==''){
+                    this.output='Выберите язык программирования!';
+                    answer.style.color="red";
+                    return;
+                }
+                if(this.input==''){
+                    this.output='Введите код программы!';
+                    answer.style.color="red";
+                    return;
+                }
+                this.output='Загрузка...'
                 var options={
                     method: 'POST',
                     url: 'https://code-compiler10.p.rapidapi.com/',
