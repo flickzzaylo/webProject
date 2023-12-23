@@ -52,7 +52,7 @@ import http from "../../http-common"
                     answer.style.color="red";
                     return;
                 }
-                if(this.input==''){
+                if(this.code==''){
                     this.output='Введите код программы!';
                     answer.style.color="red";
                     return;
