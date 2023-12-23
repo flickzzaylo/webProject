@@ -15,4 +15,6 @@ db.sequelize.sync({force: false});
 /////
 var compiler = require('./app/route/compiler.js');
 compiler(app);
+var role = require('./app/route/role.js');
+role(app);
 app.listen(2000);
