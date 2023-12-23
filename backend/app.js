@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var db = require('./app/config/db.config.js');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 var cors = require('cors');
@@ -10,6 +11,7 @@ var corsOptions = {
     optionSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+db.sequelize.sync({force: false});
 /////
 var compiler = require('./app/route/compiler.js');
 compiler(app);
