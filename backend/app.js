@@ -19,4 +19,6 @@ var role = require('./app/route/role.js');
 role(app);
 var discipline = require('./app/route/discipline.js');
 discipline(app);
+var prog_language = require('./app/route/progLanguage.js')
+prog_language(app)
 app.listen(2000);
