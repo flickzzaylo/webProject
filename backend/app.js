@@ -17,4 +17,6 @@ var compiler = require('./app/route/compiler.js');
 compiler(app);
 var role = require('./app/route/role.js');
 role(app);
+var discipline = require('./app/route/discipline.js');
+discipline(app);
 app.listen(2000);
