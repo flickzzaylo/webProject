@@ -45,11 +45,11 @@ module.exports = function(sequelize, DataTypes) {
     },
     comment: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
     file: {
       type: DataTypes.BLOB,
-      allowNull: false
+      allowNull: true
     }
   });
 };
