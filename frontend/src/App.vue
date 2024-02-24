@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <compiler/>
-    <!-- <router-view/> -->
+    <!-- <compiler/> -->
+    <NavBar/>
+    <router-view />
   </div>
 </template>
 
 <script>
-import compiler from './components/compiler/compiler.vue'
+// import compiler from './components/compiler/compiler.vue'
+import NavBar from './components/NavBar'
 
 export default {
   name: 'App',
   components: {
-    compiler: compiler
+    // compiler: compiler
+    NavBar: NavBar
   }
 }
 </script>

@@ -5,7 +5,7 @@ module.exports = (app) => {
 
     app.post('/api/createDiscipline',discipline.create);
 
-    app.post('/api/deleteDiscipline/id=:id',discipline.delete);
+    app.post('/api/deleteDiscipline/:id',discipline.delete);
 
     app.post('/api/updateDiscipline/:id',discipline.update);
 
