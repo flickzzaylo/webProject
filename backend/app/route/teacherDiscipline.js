@@ -10,4 +10,6 @@ module.exports = (app) =>{
     app.post('/api/updateTeacherDiscipline/id=:id',teacherDiscipline.update);
 
     app.post('/api/deleteTeacherDiscipline/:id',teacherDiscipline.delete);
+
+    app.get('/api/disciplinesNotTeacher/:teacher_id', teacherDiscipline.findDisciplinesNotTeacher);
 }

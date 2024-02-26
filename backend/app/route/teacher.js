@@ -7,7 +7,7 @@ module.exports = (app) =>{
 
     app.post('/api/createTeacher',teacher.create);
 
-    app.post('/api/updateTeacher/id=:id',teacher.update);
+    app.post('/api/updateTeacher/:id',teacher.update);
 
     app.post('/api/deleteTeacher/:id',teacher.delete);
 }

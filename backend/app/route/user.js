@@ -9,7 +9,7 @@ module.exports = (app) =>{
 
     app.post('/api/createUser',user.create);
 
-    app.post('/api/updateUser/id=:id',user.update);
+    app.post('/api/updateUser/:id',user.update);
 
     app.post('/api/deleteUser/:id',user.delete);
 }

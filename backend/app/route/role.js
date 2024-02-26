@@ -5,7 +5,7 @@ module.exports = (app) => {
 
     app.post('/api/addRole',role.create);
 
-    app.post('/api/deleteRole/id=:id',role.delete);
+    app.post('/api/deleteRole/:id',role.delete);
 
     app.post('/api/updateRole/:id',role.update);
 

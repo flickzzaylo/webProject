@@ -9,5 +9,5 @@ module.exports = (app) => {
 
     app.post('/api/updateProgLang/:id',prog_language.update);
 
-    app.post('/api/deleteProgLang/id=:id',prog_language.delete);
+    app.post('/api/deleteProgLang/:id',prog_language.delete);
 }
