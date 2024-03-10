@@ -136,3 +136,34 @@ exports.findByFileUploaded = (req, res) => {
         globalFunctions.sendError(res, err);
     });
 }
+
+exports.findByTeacherDisciplineIdAndTaskId = (req,res) =>{
+    db.sequelize.query(
+        `SELECT user.login, user.id as user_id, task.id as task_id, task.isComplete as task_isComplete
+        FROM user
+        RIGHT JOIN task ON user.id = task.user_id
+        WHERE teacher_discipline_id = ${req.params.teacher_discipline_id} AND task.id = ${req.params.task_id}`,
+        {
+            type: db.sequelize.QueryTypes.SELECT
+        })
+        .then(objects => {
+            globalFunctions.sendResult(res, objects);
+        })
+        .catch(err => {
+            globalFunctions.sendError(res, err);
+        })
+}
+
+exports.findByTeacherDisciplineIdAndTaskIdAndUserId = (req,res) =>{
+    db.sequelize.query(
+        `SELECT * FROM teacher_discipline, task, user WHERE teacher_discipline.id=${req.params.teacher_discipline_id} AND task.id=${req.params.task_id} AND user.id=${req.params.user_id}`,
+        {
+            type: db.sequelize.QueryTypes.SELECT
+        })
+        .then(objects => {
+            globalFunctions.sendResult(res, objects);
+        })
+        .catch(err => {
+            globalFunctions.sendError(res, err);
+        })
+}

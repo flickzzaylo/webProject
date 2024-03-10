@@ -50,6 +50,11 @@ module.exports = function(sequelize, DataTypes) {
     file: {
       type: DataTypes.BLOB,
       allowNull: true
+    },
+    isComplete: {
+      type: DataTypes.TINYINT,
+      allowNull: false,
+      defaultValue: false
     }
   });
 };

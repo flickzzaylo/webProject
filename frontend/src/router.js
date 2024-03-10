@@ -16,7 +16,9 @@ import listTeachers from "./components/teacher/listTeachers"
 import addTeacher from "./components/teacher/addTeacher"
 import listTeacherDisciplines from "./components/teacherDiscipline/listTeacherDisciplines"
 import addTeacherDiscipline from "./components/teacherDiscipline/addTeacherDiscipline"
-import listTasks from "./components/task/listTasks"
+import listTasksByDiscipline from "./components/task/listTDiscipline.vue"
+import listTasksByDisciplineAndTask from "./components/task/listTasksByDiscipline.vue"
+import listTasksByUsers from "./components/task/listTasksByUsers.vue";
 
 const routes = [
     {
@@ -162,8 +164,26 @@ const routes = [
     },
     {
         path: "/listTasks",
-        name: "ListTasks",
-        component: listTasks,
+        name: "ListTeacherDisciplinesInTask",
+        component: listTasksByDiscipline,
+        meta:{
+            title: "Список задач"
+        }
+    },
+    {
+        path: "/listTasksByD/:id",
+        name: "listTasksByD",
+        props: true,
+        component: listTasksByDisciplineAndTask,
+        meta: {
+            title: "Список задач"
+        }
+    },
+    {
+        path: "/listTasksByUser/teacher_discipline=:teacherDId/task_id=:id",
+        name: "tasksByUsers",
+        props: true,
+        component: listTasksByUsers,
         meta:{
             title: "Список задач"
         }
