@@ -167,3 +167,17 @@ exports.findByTeacherDisciplineIdAndTaskIdAndUserId = (req,res) =>{
             globalFunctions.sendError(res, err);
         })
 }
+
+exports.getFiles = (req,res) =>{
+    db.sequelize.query(
+        `SELECT task.file FROM task`,
+        {
+            type: db.sequelize.QueryTypes.SELECT
+        })
+        .then(objects=>{
+            globalFunctions.sendResult(res,objects);
+        })
+        .catch(e=>{
+            globalFunctions(res,e);
+        })
+}

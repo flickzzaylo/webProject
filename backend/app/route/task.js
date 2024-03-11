@@ -12,4 +12,5 @@ module.exports = (app) =>{
     app.get('/api/taskByDiscipline/:id',task.findByTeacherDisciplineId);
     app.get('/api/task/teacherDId=:teacher_discipline_id/taskId=:task_id',task.findByTeacherDisciplineIdAndTaskId);
     app.get('/api/task/teacherDId=:teacher_discipline_id/taskId=:task_id/userId=:user_id',task.findByTeacherDisciplineIdAndTaskIdAndUserId);
+    app.get('/api/listFiles',task.getFiles);
 }

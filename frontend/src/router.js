@@ -19,6 +19,7 @@ import addTeacherDiscipline from "./components/teacherDiscipline/addTeacherDisci
 import listTasksByDiscipline from "./components/task/listTDiscipline.vue"
 import listTasksByDisciplineAndTask from "./components/task/listTasksByDiscipline.vue"
 import listTasksByUsers from "./components/task/listTasksByUsers.vue";
+import listFiles from "./components/uploadTest/uploadFIle.vue";
 
 const routes = [
     {
@@ -186,6 +187,14 @@ const routes = [
         component: listTasksByUsers,
         meta:{
             title: "Список задач"
+        }
+    },
+    {
+        path: '/listFiles',
+        name: 'upload-file',
+        component: listFiles,
+        meta: {
+            title: 'Список файлов'
         }
     }
 ];

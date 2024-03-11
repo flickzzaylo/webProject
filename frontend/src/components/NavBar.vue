@@ -15,6 +15,8 @@
         <a class="navbar-brand"><router-link class="item" to="/listTeacherDisciplines">Дисциплины преподавателей</router-link></a>
         <a>---</a>
         <a class="navbar-brand"><router-link class="item" to="/listTasks">Задачи</router-link></a>
+        <a>---</a>
+      <a class="navbar-brand"><router-link to="/listFiles">Файлы</router-link></a>
     </div>
 </template>
 
