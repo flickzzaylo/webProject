@@ -47,4 +47,4 @@ services:
     ports:
       - $VUE_LOCAL_PORT:$VUE_DOCKER_PORT
 volumes:
-  mysqldb:
+  db:
