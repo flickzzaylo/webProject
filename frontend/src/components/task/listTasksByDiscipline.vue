@@ -6,12 +6,14 @@
     <li v-for="(taskByDisc,index) in tasksByDiscipline" :key="index">
       <router-link :to="{
       name:'tasksByUsers',
-      params: {teacherDId: this.teacher_discipline_id, id: taskByDisc.id}
+      params: {id: taskByDisc.id},
+      query: {teacherDId: this.teacher_discipline_id}
       }">
       {{taskByDisc.name}} {{taskByDisc.description}}
       </router-link>
     </li>
   </ul>
+  <div><router-link class="item" to="/addTask">Добавить задание</router-link></div>
 </template>
 
 <script>
@@ -22,18 +24,17 @@ export default {
   data(){
     return{
       tasksByDiscipline: [],
-      teacher_discipline_id: null
+      teacher_discipline_id: this.id
     }
   },
   methods: {
     getTasksByDiscipline(){
       console.log(this.id);
+      console.log(this.teacher_discipline_id + "teacherID");
         http
             .get("/taskByDiscipline/"+this.id)
             .then(response =>{
               this.tasksByDiscipline = response.data;
-              this.teacher_discipline_id = this.id;
-              console.log(this.teacher_discipline_id, "teacherId")
             })
             .catch(e=>{
               console.log(e);

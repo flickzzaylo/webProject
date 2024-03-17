@@ -15,14 +15,6 @@ module.exports = function(sequelize, DataTypes) {
         key: 'id'
       }
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'user',
-        key: 'id'
-      }
-    },
     prog_language_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -38,23 +30,6 @@ module.exports = function(sequelize, DataTypes) {
     description: {
       type: DataTypes.TEXT,
       allowNull: false
-    },
-    mark: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    comment: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    file: {
-      type: DataTypes.BLOB,
-      allowNull: true
-    },
-    isComplete: {
-      type: DataTypes.TINYINT,
-      allowNull: false,
-      defaultValue: false
     }
   });
 };

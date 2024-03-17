@@ -17,6 +17,7 @@
 
 <script>
 import http from "../../http-common"
+
 export default{
     name: "ListRoles",
     data()
@@ -25,18 +26,16 @@ export default{
         roles:[]
     };
     },
-    methods:{
-        getRoles(){
-            http
-            .get('/listRoles')
-            .then(response=>{
-                this.roles = response.data;
-            })
-            .catch(e=>{
-                console.log(e);
-            })
-        }
-    },
+methods:{
+    async getRoles(){
+      try {
+        const response = await http.get("/listRoles");
+        this.roles = response.data;
+      }catch (e){
+        console.log('Roles vue error: ' + e);
+      }
+    }
+  },
     mounted(){
         this.getRoles();
     }

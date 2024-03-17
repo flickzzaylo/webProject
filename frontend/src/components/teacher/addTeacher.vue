@@ -51,7 +51,7 @@
             },
             getUsers() {
                 http
-                    .get("/listUsers")
+                    .get("/listTeachersHasNotUser")
                     .then(response => {
                         this.users = response.data;
                     })

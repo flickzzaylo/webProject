@@ -12,4 +12,7 @@ module.exports = (app) =>{
     app.post('/api/updateUser/:id',user.update);
 
     app.post('/api/deleteUser/:id',user.delete);
+
+    app.get('/api/listTeachersUsers',user.findTeachers);
+    app.get('/api/listTeachersHasNotUser',user.teachersHasNotUser);
 }

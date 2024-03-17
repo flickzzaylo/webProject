@@ -29,4 +29,6 @@ var teacherDiscipline = require('./app/route/teacherDiscipline.js');
 teacherDiscipline(app);
 var task = require('./app/route/task.js');
 task(app);
+var userTasks = require('./app/route/userTasks');
+userTasks(app);
 app.listen(2000);

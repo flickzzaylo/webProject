@@ -11,6 +11,7 @@
           </router-link>
         </li>
       </ul>
+      <div><router-link class="item" to="/addUser">Добавить пользователя</router-link></div>
     </div>
   </template>
   

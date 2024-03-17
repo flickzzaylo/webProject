@@ -26,13 +26,9 @@ exports.findById = (req,res) =>{
 exports.create = (req, res) => {
     task.create({
         teacher_discipline_id: req.body.teacher_discipline_id,
-        user_id: req.body.user_id,
         prog_language_id: req.body.prog_language_id,
         name: req.body.name,
         description: req.body.description
-        // mark: req.body.mark,
-        // comment: req.body.comment,
-        // file: req.body.file
     })
     .then(object => {
         globalFunctions.sendResult(res, object);
@@ -45,13 +41,9 @@ exports.create = (req, res) => {
 exports.update = (req, res) => {
     task.update({
         teacher_discipline_id: req.body.teacher_discipline_id,
-        user_id: req.body.user_id,
         prog_language_id: req.body.prog_language_id,
         name: req.body.name,
-        description: req.body.description,
-        mark: req.body.mark,
-        comment: req.body.comment,
-        file: req.body.file
+        description: req.body.description
     }, {
         where: {
             id: req.params.id
@@ -93,19 +85,19 @@ exports.findByProgLanguage = (req, res) => {
     });
 }
 
-exports.findByUserId = (req, res) => {
-    task.findAll({
-        where: {
-            user_id: req.params.id
-        }
-    })
-    .then(objects => {
-        globalFunctions.sendResult(res, objects);
-    })
-    .catch(err => {
-        globalFunctions.sendError(res, err);
-    });
-}
+// exports.findByUserId = (req, res) => {
+//     task.findAll({
+//         where: {
+//             user_id: req.params.id
+//         }
+//     })
+//     .then(objects => {
+//         globalFunctions.sendResult(res, objects);
+//     })
+//     .catch(err => {
+//         globalFunctions.sendError(res, err);
+//     });
+// }
 
 exports.findByTeacherDisciplineId = (req, res) => {
     task.findAll({
@@ -121,21 +113,21 @@ exports.findByTeacherDisciplineId = (req, res) => {
     });
 }
 
-exports.findByFileUploaded = (req, res) => {
-    task.findAll({
-        where: {
-            file: {
-                [Op.not]: ''
-            }
-        }
-    })
-    .then(objects => {
-        globalFunctions.sendResult(res, objects);
-    })
-    .catch(err => {
-        globalFunctions.sendError(res, err);
-    });
-}
+// exports.findByFileUploaded = (req, res) => {
+//     task.findAll({
+//         where: {
+//             file: {
+//                 [Op.not]: ''
+//             }
+//         }
+//     })
+//     .then(objects => {
+//         globalFunctions.sendResult(res, objects);
+//     })
+//     .catch(err => {
+//         globalFunctions.sendError(res, err);
+//     });
+// }
 
 exports.findByTeacherDisciplineIdAndTaskId = (req,res) =>{
     db.sequelize.query(
@@ -154,16 +146,16 @@ exports.findByTeacherDisciplineIdAndTaskId = (req,res) =>{
         })
 }
 
-exports.findByTeacherDisciplineIdAndTaskIdAndUserId = (req,res) =>{
-    db.sequelize.query(
-        `SELECT * FROM teacher_discipline, task, user WHERE teacher_discipline.id=${req.params.teacher_discipline_id} AND task.id=${req.params.task_id} AND user.id=${req.params.user_id}`,
-        {
-            type: db.sequelize.QueryTypes.SELECT
-        })
-        .then(objects => {
-            globalFunctions.sendResult(res, objects);
-        })
-        .catch(err => {
-            globalFunctions.sendError(res, err);
-        })
-}
+// exports.findByTeacherDisciplineIdAndTaskIdAndUserId = (req,res) =>{
+//     db.sequelize.query(
+//         `SELECT * FROM teacher_discipline, task, user WHERE teacher_discipline.id=${req.params.teacher_discipline_id} AND task.id=${req.params.task_id} AND user.id=${req.params.user_id}`,
+//         {
+//             type: db.sequelize.QueryTypes.SELECT
+//         })
+//         .then(objects => {
+//             globalFunctions.sendResult(res, objects);
+//         })
+//         .catch(err => {
+//             globalFunctions.sendError(res, err);
+//         })
+// }
