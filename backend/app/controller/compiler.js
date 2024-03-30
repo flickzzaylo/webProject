@@ -53,11 +53,9 @@ const axios = require('axios');
 exports.code = async (req, res) => {
     try {
         const response = await axios.request(req.body);
-        console.log(response.data);
         globalFunctions.sendResult(res, response.data);
 
     } catch (error) {
-        console.log("Error");
         console.error(error);
         globalFunctions.sendResult(res, error);
     }

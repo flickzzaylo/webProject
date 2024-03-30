@@ -71,3 +71,11 @@ exports.update = (req, res) => {
             globalFunctions.sendError(res,err);
         })
 }
+
+// exports.addUser = async (req,res) => {
+//     try{
+//         const data = await db.sequelize.query(`INSERT`)
+//     }catch (e){
+//
+//     }
+// }
