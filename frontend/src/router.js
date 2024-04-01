@@ -21,6 +21,7 @@ import listTasksByDisciplineAndTask from "./components/task/listTasksByDisciplin
 import listTasksByUsers from "./components/task/listTasksByUsers.vue";
 import addUser from "./components/user/addUser.vue";
 import addTask from "./components/task/addTask.vue";
+import commentModal from "./components/task/commentModal.vue"
 
 const routes = [
     {
@@ -204,6 +205,15 @@ const routes = [
         component: addTask,
         meta: {
             title: "Добавления задания"
+        }
+    },
+    {
+        path:"/commentModal",
+        name: "comment-modal",
+        component: commentModal,
+        props: true,
+        meta:{
+            title: "Редактирование комментария"
         }
     }
 ];
