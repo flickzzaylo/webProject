@@ -5,9 +5,9 @@
             <div>
                 <input type="text" name="login" id="login" placeholder="Логин" required v-model="user.login">
             </div>
-            <div>
-                <input type="text" name="password" id="password" placeholder="Логин" required v-model="user.password">
-            </div>
+<!--            <div>-->
+<!--                <input type="text" name="password" id="password" placeholder="Логин" required v-model="user.password">-->
+<!--            </div>-->
             <div>
                 <select class="form-select" required v-model="user.role_id">
                     <option value="" disabled selected>Выберите роль</option>

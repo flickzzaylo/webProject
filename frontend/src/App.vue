@@ -1,20 +1,20 @@
 <template>
   <div id="app">
-    <!-- <compiler/> -->
     <NavBar/>
+<!--    <LoginUser/>-->
     <router-view />
   </div>
 </template>
 
 <script>
-// import compiler from './components/compiler/compiler.vue'
 import NavBar from './components/NavBar'
+// import LoginUser from "@/components/authorization/Login.vue";
 
 export default {
   name: 'App',
   components: {
-    // compiler: compiler
     NavBar: NavBar
+    // LoginUser: LoginUser
   }
 }
 </script>

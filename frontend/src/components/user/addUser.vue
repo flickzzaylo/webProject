@@ -34,7 +34,8 @@ export default {
         password: "",
         role_id: null
       },
-      roles: []
+      roles: [],
+      successful: false,
     }
   },
   methods: {
@@ -45,17 +46,19 @@ export default {
     async addUser(e) {
       try {
         e.preventDefault();
-        var data = {
-          login: this.user.login,
-          password: this.user.password,
-          role_id: this.user.role_id
-        };
-        await http.post("/createUser", data);
-        this.$router.push("/listUsers")
+        // var data = {
+        //   login: this.user.login,
+        //   password: this.user.password,
+        //   role_id: this.user.role_id
+        // };
+        // await http.post("/createUser", data);
+        await this.$store.dispatch("auth/register", this.user);
+        this.successful=true;
+        this.$router.push("/listUsers");
       }catch (e){
         console.log(e);
       }
-    },
+    }
   },
   mounted() {
     this.getRoles();
