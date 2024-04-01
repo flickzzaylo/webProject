@@ -1,6 +1,7 @@
 var db = require('../config/db.config.js');
 var globalFunctions = require('../config/global.function.js');
 const {caretTrimReplace} = require("semver/internal/re");
+const {response} = require("express");
 var UserTasks = db.user_tasks;
 
 exports.findAll = (req, res) => {
@@ -70,6 +71,46 @@ exports.update = (req, res) => {
         .catch(err=>{
             globalFunctions.sendError(res,err);
         })
+}
+
+exports.findById = async (req,res) =>{
+    try {
+        const data = await UserTasks.findByPk(req.params.id);
+        globalFunctions.sendResult(res, data);
+    }catch (e){
+        console.log(e);
+        globalFunctions.sendResult(res,e);
+    }
+}
+
+exports.create = (req,res) =>{
+    UserTasks.create({
+        task_id:req.body.task_id,
+        user_id:req.body.user_id,
+        mark:null,
+        comment: "",
+        file: null,
+        isComplete: 0
+    })
+        .then(object=>{
+            globalFunctions.sendResult(res,object);
+        })
+        .catch(err=>{
+            globalFunctions.sendError(res,err);
+        })
+}
+
+exports.findUsersInTask = async (req,res) =>{
+    try {
+        const data = await db.sequelize.query(
+            `SELECT user_tasks.user_id FROM user_tasks WHERE user_tasks.task_id=${req.params.task_id}`,
+            {
+                type: db.sequelize.QueryTypes.SELECT
+            })
+        globalFunctions.sendResult(res, data);
+    }catch(e){
+        globalFunctions.sendError(res,e);
+    }
 }
 
 // exports.addUser = async (req,res) => {
