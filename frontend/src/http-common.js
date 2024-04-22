@@ -5,7 +5,7 @@ var user = JSON.parse(localStorage.getItem('user'));
 if (user && user.accessToken) {
   token = user.accessToken;
 }
-
+console.log(token)
 export default axios.create({
   baseURL: "http://localhost:2000/api", // указание адреса сервера
   headers: {

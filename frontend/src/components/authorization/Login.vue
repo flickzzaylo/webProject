@@ -49,6 +49,7 @@ export default {
       this.loading = true;
       this.$store.dispatch("auth/login", this.user) // обращаемся к методу login, который определён в auth.service.js
           .then(() => {
+            // this.$router.push('/')
             window.location.href = '/'; // авторизация прошла успешно, переходим к главной странице. Используем такую конструкцию, а не this.$router.push, так как требуется перезагрузить страницу для обновления локального хранилища
           })
           .catch(e => {
