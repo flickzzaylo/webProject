@@ -15,14 +15,27 @@
         <a class="navbar-brand"><router-link class="item" to="/listTeacherDisciplines">Дисциплины преподавателей</router-link></a>
         <a>---</a>
         <a class="navbar-brand"><router-link class="item" to="/listTasks">Задачи</router-link></a>
+        <a>---</a>
+        <a class="navbar-brand">{{currentUser.login}} <a href @click.prevent="logOut"> Выйти</a></a>
     </div>
 </template>
 
 <script>
-    export default{
-        name: "NavBar",
-        data(){
-            return {};
-        }
+export default {
+  name: "NavBar",
+  data() {
+    return {};
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
     }
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch('auth/logout'); // обращаемся к методу logout, который определён в auth.service.js
+      window.location.href = '/'; // // Используем такую конструкцию, а не this.$router.push, так как требуется перезагрузить страницу для обновления локального хранилища
+    }
+  }
+};
 </script>

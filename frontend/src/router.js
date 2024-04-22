@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
+import store from "./store/index";
 import compiler from "./components/compiler/compiler"
 import listDisciplines from "./components/discipline/listDisciplines"
 import discipline from "./components/discipline/Discipline"
@@ -21,7 +22,8 @@ import listTasksByDisciplineAndTask from "./components/task/listTasksByDisciplin
 import listTasksByUsers from "./components/task/listTasksByUsers.vue";
 import addUser from "./components/user/addUser.vue";
 import addTask from "./components/task/addTask.vue";
-import commentModal from "./components/task/commentModal.vue"
+import commentModal from "./components/task/commentModal.vue";
+import login from "./components/authorization/Login.vue";
 
 const routes = [
     {
@@ -213,7 +215,16 @@ const routes = [
         component: commentModal,
         props: true,
         meta:{
-            title: "Редактирование комментария"
+            title: "Редактирование комментария",
+            requiredAuth: true
+        }
+    },
+    {
+        path:"/login",
+        name: "LoginUser",
+        component: login,
+        meta:{
+            title: "Вход"
         }
     }
 ];
@@ -223,9 +234,24 @@ const router = createRouter({
 });
 
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     document.title = to.meta.title || 'Комлятор онлайн';
-    next();
+    const auth = await store.getters["auth/isTokenActive"];
+    if (auth) {
+        return next();
+    }
+    else if (!auth && to.meta.requiredAuth) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        await store.dispatch("auth/refreshToken", user)
+            .then(() => {
+                return next();
+            })
+            .catch(() => {
+                return next({path: "/login"});
+            });
+        return next({ path: "/login" });
+    }
+    return next();
 });
 
 export default router;

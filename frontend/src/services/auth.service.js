@@ -10,6 +10,7 @@ function login(user) {
     return http
         .post("/login", data)
         .then(response => {
+            console.log(response.data);
             if (response.data.accessToken) {
                 // записываем данные пользователя в локальное хранилище, которое находится в браузере
                 localStorage.setItem('user', JSON.stringify(response.data));
