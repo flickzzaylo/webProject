@@ -2,25 +2,20 @@ import http from "../http-common"
 export const userRole = {
     data(){
         return{
-            user: ""
-        }
-    },
-    computed: {
-        async currentUserRole() {
-            this.getCurrentUser();
-            let role = null;
-            try {
-                const response = await http.get('/roleByUser/' + this.user);
-                role = response.data[0].role_id;
-            }catch (e){
-                console.log(e);
-            }
-            return role;
+            role: null
         }
     },
     methods:{
-        getCurrentUser(){
-            this.user = this.$store.state.auth.user.login;
+        currentUserRole() {
+            const user = this.$store.state.auth.user.login;
+            http
+                .get('/roleByUser/'+user)
+                .then(response=>{
+                    this.role = response.data[0].role_id;
+                })
+                .catch(e=>{
+                    console.log(e);
+                })
         }
     }
 }

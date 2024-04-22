@@ -1,6 +1,5 @@
 <template>
-  {{this.currentUserRole}}
-  <div>
+  <div v-if="this.role===3">
     Список пользователей
     <ul>
       <li v-for="(user, index) in users" :key="index">
@@ -41,6 +40,7 @@ export default {
   },
   mounted() {
     this.getUsers();
+    this.currentUserRole();
   }
 }
 </script>
