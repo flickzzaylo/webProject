@@ -110,3 +110,18 @@ exports.teachersHasNotUser = (req,res) =>{
         })
 }
 
+exports.findRoleByUser = async (req,res)=>{
+    try{
+    const data = await db.sequelize.query(
+        `select user.role_id from user where user.login='${req.params.login}';`,
+        {
+            type: db.sequelize.QueryTypes.SELECT
+        }
+    )
+        console.log(data);
+        globalFunctions.sendResult(res,data);
+    }catch(e){
+        globalFunctions.sendError(res,e);
+    }
+}
+

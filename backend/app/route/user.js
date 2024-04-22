@@ -15,4 +15,6 @@ module.exports = (app) =>{
 
     app.get('/api/listTeachersUsers',[authJwt.verifyToken],user.findTeachers);
     app.get('/api/listTeachersHasNotUser',[authJwt.verifyToken],user.teachersHasNotUser);
+
+    app.get('/api/roleByUser/:login',[authJwt.verifyToken],user.findRoleByUser);
 }

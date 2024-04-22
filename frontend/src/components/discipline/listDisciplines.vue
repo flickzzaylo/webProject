@@ -13,7 +13,6 @@
         </ul>
         <router-link class="item" to="/addDiscipline">Добавить дисциплину</router-link>
     </div>
-
 </template>
 
 <script>
@@ -39,7 +38,7 @@ export default{
         }
     },
     mounted(){
-        this.getDisciplines();
+      this.getDisciplines();
     }
 }
 </script>
