@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="this.role===3">
     <h4>Добавление пользователя</h4>
     <form @submit="addUser">
       <div>
@@ -25,8 +25,10 @@
 
 <script>
 import http from "../../http-common"
+import {userRole} from "@/mixins/currentUser";
 export default {
   name: "addUser",
+  mixins: [userRole],
   data(){
     return{
       user:{
@@ -61,6 +63,7 @@ export default {
     }
   },
   mounted() {
+    this.currentUserRole();
     this.getRoles();
   }
 }

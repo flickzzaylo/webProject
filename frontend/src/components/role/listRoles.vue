@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="this.role===3">
         Список ролей
         <ul>
             <li v-for="(role,index) in roles" :key="index">
@@ -17,9 +17,11 @@
 
 <script>
 import http from "../../http-common"
+import {userRole} from "@/mixins/currentUser";
 
 export default{
     name: "ListRoles",
+  mixins: [userRole],
     data()
     {
         return{
@@ -37,6 +39,7 @@ methods:{
     }
   },
     mounted(){
+      this.currentUserRole();
         this.getRoles();
     }
 }

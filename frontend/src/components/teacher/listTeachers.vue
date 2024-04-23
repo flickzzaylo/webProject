@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="this.role===3">
       Список преподавателей
       <ul>
         <li v-for="(teacher, index) in teachers" :key="index">
@@ -17,8 +17,10 @@
   
   <script>
     import http from "../../http-common";
+    import {userRole} from "@/mixins/currentUser";
     export default {
         name: "ListTeachers",
+        mixins: [userRole],
         data() {
             return {
                 teachers: []
@@ -37,6 +39,7 @@
             }
         },
         mounted() {
+          this.currentUserRole();
             this.getTeachers();
         }
     }

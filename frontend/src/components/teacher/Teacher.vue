@@ -1,5 +1,5 @@
 <template>
-    <div v-if="teacher">
+    <div v-if="teacher && this.role===3">
         <h4>Данные преподавателей</h4>
         <form @submit="updateTeacher">
             <div>
@@ -29,9 +29,11 @@
 
 <script>
     import http from "../../http-common";
+    import {userRole} from "@/mixins/currentUser";
     export default {
         name: "teacher-details",
         props: ['id'],
+      mixins: [userRole],
         data() {
             return {
                 teacher: null,
@@ -86,6 +88,7 @@
             }
         },
         mounted() {
+          this.currentUserRole();
             this.getTeacher();
             this.getUsers();
         }

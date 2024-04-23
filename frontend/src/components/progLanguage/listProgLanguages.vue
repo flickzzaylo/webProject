@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="this.role===3">
         Список языков программирования
         <ul>
             <li v-for="(progLang,index) in progLangs" :key="index">
@@ -18,8 +18,10 @@
 
 <script>
 import http from "../../http-common"
+import {userRole} from "@/mixins/currentUser";
 export default{
     name: "ListProgLang",
+  mixins: [userRole],
     data()
     {
         return{
@@ -39,6 +41,7 @@ export default{
         }
     },
     mounted(){
+      this.currentUserRole();
         this.getProgLangs();
     }
 }

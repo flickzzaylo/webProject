@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="this.role===3 || this.role===1">
         Добавление учебной дисциплины
         <div v-if="!submitted">
             <form @submit="addDiscipline">
@@ -21,8 +21,10 @@
 
 <script>
 import http from "../../http-common"
+import {userRole} from "@/mixins/currentUser";
 export default{
     name:"AddDiscipline",
+  mixins: [userRole],
     data(){
         return{
             discipline:{
@@ -56,6 +58,9 @@ export default{
                     name: ""
                 };
             }
-    }
+    },
+  mounted() {
+      this.currentUserRole();
+  }
 }
 </script>

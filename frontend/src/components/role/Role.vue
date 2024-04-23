@@ -1,9 +1,9 @@
 <template>
-    <div v-if="this.role">
+    <div v-if="this.roleUser && this.role===3">
         Роль
         <div v-if="!submitted">
             <form @submit="updateRole">
-                <input type="text" name="name" id="name" placeholder="Наименование" required v-model="role.name">
+                <input type="text" name="name" id="name" placeholder="Наименование" required v-model="roleUser.name">
                 <input type="submit" value="Обновить">
             </form>
             <button v-on:click="deleteRole()">Удалить</button>
@@ -17,12 +17,14 @@
 
 <script>
 import http from "../../http-common"
+import {userRole} from "@/mixins/currentUser";
 export default{
     name: "role-details",
     props: ['id'],
+  mixins: [userRole],
     data(){
         return{
-            role: null,
+        roleUser: null,
             submitted: false
         };
     },
@@ -31,7 +33,7 @@ export default{
                 http
                     .get("/role/" + this.id)
                     .then(response => {
-                        this.role = response.data;
+                        this.roleUser = response.data;
                     })
                     .catch(e => {
                         console.log(e);
@@ -40,11 +42,11 @@ export default{
             updateRole(e) {
                 e.preventDefault();
                 var data = {
-                    name: this.role.name
+                    name: this.roleUser.name
                 };
 
                 http
-                    .post("/updateRole/" + this.role.id, data)
+                    .post("/updateRole/" + this.roleUser.id, data)
                     .then(() => {
                     })
                     .catch(e => {
@@ -54,7 +56,7 @@ export default{
             },
             deleteRole() {
                 http
-                    .post("/deleteRole/" + this.role.id)
+                    .post("/deleteRole/" + this.roleUser.id)
                     .then(() => {
                         this.$router.push('/listRoles');
                     })
@@ -64,6 +66,7 @@ export default{
             }
         },
         mounted() {
+            this.currentUserRole();
             this.getRole();
         }
 }

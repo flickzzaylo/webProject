@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="this.role===3 || this.role===1">
   <h4>Добавление задачи</h4>
   <form @submit="addTask">
     <div>
@@ -35,8 +35,10 @@
 
 <script>
 import http from "../../http-common";
+import {userRole} from "@/mixins/currentUser";
   export default{
     name: "addTask",
+    mixins: [userRole],
     data(){
       return{
         task:{
@@ -83,6 +85,7 @@ import http from "../../http-common";
       }
     },
     mounted() {
+      this.currentUserRole();
       this.getTeacherDisciplines();
       this.getProgLangs();
     }

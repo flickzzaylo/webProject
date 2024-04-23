@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div v-if="this.role===3">
         Добавление роли
         <div v-if="!submitted">
             <form @submit="addRole">
-                <input type="text" name="name" id="name" placeholder="Наименование роли" required v-model="role.name">
+                <input type="text" name="name" id="name" placeholder="Наименование роли" required v-model="roleUser.name">
                 <input type="submit" value="Добавить">
             </form>
         </div>
@@ -21,11 +21,13 @@
 
 <script>
 import http from "../../http-common"
+import {userRole} from "@/mixins/currentUser";
 export default{
     name:"AddRole",
+  mixins:[userRole],
     data(){
         return{
-            role:{
+            roleUser:{
                 id:null,
                 name: ""
             },
@@ -36,12 +38,12 @@ export default{
         addRole(e){
             e.preventDefault();
             var data = {
-                name: this.role.name
+                name: this.roleUser.name
             };
             http
                     .post("/addRole", data)
                     .then(response => {
-                        this.role.id = response.data.id;
+                        this.roleUser.id = response.data.id;
                     })
                     .catch(e => {
                         console.log(e);
@@ -51,11 +53,14 @@ export default{
         },
         newRole() {
                 this.submitted = false;
-                this.role = {
+                this.roleUser = {
                     id: null,
                     name: ""
                 };
             }
-    }
+    },
+  mounted() {
+      this.currentUserRole();
+  }
 }
 </script>

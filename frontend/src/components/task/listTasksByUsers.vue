@@ -50,7 +50,7 @@
         <div>
           <input type="submit" value="Обновить">
         </div>
-        <div>
+        <div >
           <button v-on:click="deleteTask()">Удалить</button>
         </div>
       </form>
@@ -67,9 +67,11 @@
 import http from "../../http-common";
 import modal from "./commentModal.vue";
 import userModal from "./addUserModal.vue";
+import {userRole} from "@/mixins/currentUser";
 export default {
   name: "tasksByUsers",
   props: ['id'],
+  mixins: [userRole],
   components:{
     modal,
     userModal
@@ -159,7 +161,7 @@ export default {
     },
     closeUserModal(){
       this.isUserModalVisible=false;
-      // window.location.reload();
+      window.location.reload();
     },
     showModal(taskId){
       this.isModalVisible=true;
@@ -169,10 +171,11 @@ export default {
     closeModal(){
       this.isModalVisible=false;
       this.selectedTaskId=null;
-      // window.location.reload();
+      window.location.reload();
     }
   },
   mounted() {
+    this.currentUserRole();
     this.getUsersByTask();
     this.getTask(this.id);
   }

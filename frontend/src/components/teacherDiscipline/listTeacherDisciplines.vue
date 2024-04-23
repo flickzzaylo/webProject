@@ -1,5 +1,5 @@
 <template>
-    <div class="col-sm-6">
+    <div v-if="this.role===3" class="col-sm-6">
       Учебные дисциплины преподавателей
       <table border="1" class="table table-bordered table-striped mt-3">
         <thead class="table-primary">
@@ -27,8 +27,10 @@
   
   <script>
   import http from "../../http-common";
+  import {userRole} from "@/mixins/currentUser";
   export default {
     name: "ListTeacherDisciplines",
+    mixins: [userRole],
     data() {
       return {
         teacherDisciplines: []
@@ -58,6 +60,7 @@
       }
     },
     mounted() {
+      this.currentUserRole();
       this.getTeacherDisciplines();
     }
   }

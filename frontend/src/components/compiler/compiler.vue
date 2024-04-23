@@ -1,4 +1,5 @@
 <template>
+  <div v-if="this.role===3">
         <h3>Компилятор</h3>
         <a>Выберите язык программирования: </a>
         <select v-model="selected">
@@ -18,12 +19,15 @@
         <br>
         <br>
         <label id="answer" style="color: yellowgreen;">{{ output }}</label>
+  </div>
 </template>
 
 <script>
 import http from "../../http-common"
+import {userRole} from "@/mixins/currentUser";
     export default {
         name: "TheCompiler",
+      mixins: [userRole],
         data() {
             return {
                 languages:{
@@ -106,6 +110,9 @@ import http from "../../http-common"
                     }
                     );
             }
-        }
+        },
+      mounted() {
+          this.currentUserRole();
+      }
     };
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="col-sm-6">
+    <div v-if="this.role===3" class="col-sm-6">
       Назначение преподавателю учебной дисциплины
       <form @submit="addTeacherDiscipline">
         <div class="form-group mb-3">
@@ -27,8 +27,10 @@
   
   <script>
     import http from "../../http-common";
+    import {userRole} from "@/mixins/currentUser";
     export default {
       name: "AddTeacherDiscipline",
+      mixins: [userRole],
       data() {
         return {
           teacher_discipline: {
@@ -77,6 +79,7 @@
         },
       },
       mounted(){
+        this.currentUserRole();
         this.getTeachers();
       }
     }

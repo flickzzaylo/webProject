@@ -1,5 +1,5 @@
 <template>
-    <div v-if="this.proglang">
+    <div v-if="this.proglang && this.role===3">
         Язык программирования
         <div v-if="!submitted">
             <form @submit="updateProgLang">
@@ -17,9 +17,11 @@
 
 <script>
 import http from "../../http-common"
+import {userRole} from "@/mixins/currentUser";
 export default{
     name: "proglang-details",
     props: ['id'],
+    mixins:[userRole],
     data(){
         return{
             proglang: null,
@@ -64,6 +66,7 @@ export default{
             }
         },
         mounted() {
+            this.currentUserRole();
             this.getProgLang();
         }
 }
