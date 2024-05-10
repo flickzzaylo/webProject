@@ -3,6 +3,9 @@ var globalFunctions = require('../config/global.function.js');
 const {caretTrimReplace} = require("semver/internal/re");
 const {response} = require("express");
 var UserTasks = db.user_tasks;
+var multiparty = require('multiparty');
+var fs = require('fs');
+var uuid = require('uuid');
 
 exports.findAll = (req, res) => {
     UserTasks.findAll()
@@ -111,6 +114,47 @@ exports.findUsersInTask = async (req,res) =>{
     }catch(e){
         globalFunctions.sendError(res,e);
     }
+}
+
+exports.uploadFile = async (req,res)=>{
+    var form = new multiparty.Form();
+    await form.parse(req,async (err,fields,files) => {
+      if(!err){
+          var mimeType = files.file[0].headers['content-type'];
+          expansion = mimeType.split('/')[1];
+          var newName = uuid.v4() + "." + expansion;
+          var link = './files/' + newName;
+
+          fs.copyFile(files.file[0].path, link, (err) => {
+              if (err) {
+                  throw err;
+              }
+              fs.unlink(files.file[0].path, (err) => {
+                  if (err) {
+                      console.error('Ошибка удаления файла:', err);
+                  }
+              });
+          });
+          UserTasks.update({
+              file: newName,
+              mime_type: mimeType
+          }, {
+              where: {
+                  id: req.params.id
+              }
+          })
+              .then(object=>{
+                  globalFunctions.sendResult(res,object);
+                  console.log(`file uploaded:${res}`);
+              })
+              .catch(err=>{
+                  globalFunctions.sendError(res,err);
+                  console.log(error);
+              })
+      }else{
+          console.log(err);
+      }
+    })
 }
 
 // exports.addUser = async (req,res) => {

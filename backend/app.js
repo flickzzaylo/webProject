@@ -12,6 +12,7 @@ var corsOptions = {
 };
 app.use(cors(corsOptions));
 db.sequelize.sync({force: false});
+app.use(express.static("files"));
 /////
 var compiler = require('./app/route/compiler.js');
 compiler(app);

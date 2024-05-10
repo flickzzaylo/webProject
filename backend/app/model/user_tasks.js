@@ -24,8 +24,12 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         },
         file: {
-            type: DataTypes.BLOB,
+            type: DataTypes.TEXT,
             allowNull: true
+        },
+        mime_type: {
+            type: DataTypes.TEXT,
+            allowNull: false,
         },
         isComplete: {
             type: DataTypes.TINYINT,

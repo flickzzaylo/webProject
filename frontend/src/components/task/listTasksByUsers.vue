@@ -28,7 +28,14 @@
                 {{ task.comment && task.comment.length > 0 ? commentSlice(task.comment) : 'Добавить комментарий' }}
             </button>
           </td>
-          <td>{{task.file}}</td>
+          <td>
+            <input type="file" :ref="'file_' + index" accept=".zip, .rar" v-on:change="uploadFile(task.id)">
+            <div v-if="task.file">
+              <a :href="this.globalVariables.serverUrl + task.file" download>
+              (архив)
+              </a>
+            </div>
+          </td>
           <td><input type="checkbox" :true-value="1" :false-value="0" v-model="task.isComplete" v-on:click="switchCheckbox(task.id)"></td>
           <td>
             <button v-on:click="deleteUser(task.id)">Удалить</button>
@@ -100,6 +107,24 @@ export default {
           })
           .catch(e=>{
             console.log(e)
+          })
+    },
+    async uploadFile(id){
+      event.preventDefault();
+      const index = this.userTasks.findIndex(task=>task.id ===id)
+      let formData = new FormData();
+      formData.append('file', this.$refs['file_' + index][0].files[0]);
+      await http
+          .post(`/uploadTask/${id}`,formData,{
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          .then((msg)=>{
+            console.log(msg);
+          })
+          .catch((e)=>{
+            console.log(e);
           })
     },
     async getTask(id){

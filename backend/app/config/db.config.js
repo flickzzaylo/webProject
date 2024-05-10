@@ -5,7 +5,7 @@ var dbProperties = {
     host: 'localhost',
     dialect: 'mysql',
     pool: {
-        max: 5, // максимальное количество одновременно открытых соединений
+        max: 10, // максимальное количество одновременно открытых соединений
         min: 0, 
         acquire: 30000,
         idle: 10000
@@ -41,6 +41,12 @@ var db = init_models.initModels(sequelize);
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+
+Object.keys(db).forEach(key => {
+    if (db[key] && db[key].associate) {
+        db[key].associate(db);
+    }
+});
 
 // db.role.create({
 //     name: 'Виталя'

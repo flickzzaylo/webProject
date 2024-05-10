@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Апр 01 2024 г., 11:28
+-- Время создания: Май 10 2024 г., 06:00
 -- Версия сервера: 10.4.32-MariaDB
 -- Версия PHP: 8.2.12
 
@@ -175,7 +175,6 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `role_id`, `login`, `password`) VALUES
-(2, 3, 'admin', 'admin'),
 (3, 1, 'Kirichenko', 'kirich123'),
 (4, 2, 'Zabrodin', 'zooru123'),
 (5, 2, 'Siviy', 'sivsiv'),
@@ -185,7 +184,10 @@ INSERT INTO `user` (`id`, `role_id`, `login`, `password`) VALUES
 (10, 2, 'IvanIvanov', 'vanovanovano'),
 (11, 2, 'AndreevAndrey', 'strongpassword'),
 (12, 2, 'test1', 'test1'),
-(13, 2, 'test2', 'test2');
+(13, 2, 'test2', 'test2'),
+(14, 3, 'admin', '$2a$10$.vfRiN6LTueeRm4VAWLAFO.l93R3ioFZHIObFFFEIdL.ICwIfuc5W'),
+(15, 3, 'superuser', '$2a$10$rS6fh7ydsxrmlxdx1LDTKebJvUJS9Yq.EODsfN1EOJdnDgG60XGGK'),
+(16, 2, 'user', '$2a$10$FYZScGH.Y9NycLgJFnP2a.qglPifImE3Fb9qL5hNMrIi4ysM8lYKa');
 
 -- --------------------------------------------------------
 
@@ -199,7 +201,8 @@ CREATE TABLE `user_tasks` (
   `user_id` int(11) NOT NULL,
   `mark` int(11) DEFAULT NULL,
   `comment` text NOT NULL,
-  `file` blob DEFAULT NULL,
+  `file` text DEFAULT NULL,
+  `mime_type` text NOT NULL,
   `isComplete` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -207,9 +210,12 @@ CREATE TABLE `user_tasks` (
 -- Дамп данных таблицы `user_tasks`
 --
 
-INSERT INTO `user_tasks` (`id`, `task_id`, `user_id`, `mark`, `comment`, `file`, `isComplete`) VALUES
-(1, 2, 7, NULL, 'asas', NULL, 1),
-(3, 2, 4, NULL, 'куккк', NULL, 0);
+INSERT INTO `user_tasks` (`id`, `task_id`, `user_id`, `mark`, `comment`, `file`, `mime_type`, `isComplete`) VALUES
+(1, 2, 7, NULL, 'S', '', '', 1),
+(3, 2, 4, NULL, 'куккк', '', '', 0),
+(23, 4, 4, NULL, 'фывфыв', NULL, '', 0),
+(24, 4, 5, NULL, '', NULL, '', 0),
+(25, 2, 5, NULL, 'asd', '', '', 0);
 
 --
 -- Индексы сохранённых таблиц
@@ -328,13 +334,13 @@ ALTER TABLE `testcase`
 -- AUTO_INCREMENT для таблицы `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT для таблицы `user_tasks`
 --
 ALTER TABLE `user_tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

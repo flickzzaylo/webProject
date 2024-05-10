@@ -16,4 +16,6 @@ module.exports = (app) =>{
     app.post('/api/addUserToTask/:user_id',[authJwt.verifyToken],userTasks.create);
 
     app.get('/api/getUsersInTask/:task_id',[authJwt.verifyToken],userTasks.findUsersInTask);
+
+    app.post('/api/uploadTask/:id',[authJwt.verifyToken],userTasks.uploadFile);
 }
