@@ -117,7 +117,8 @@ export default {
         user_id:id,
         mark:null,
         comment: "",
-        file: null,
+        file: "",
+        mime_type: "",
         isComplete: 0
       };
       try {

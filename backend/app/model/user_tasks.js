@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         mime_type: {
             type: DataTypes.TEXT,
-            allowNull: false,
+            allowNull: true,
         },
         isComplete: {
             type: DataTypes.TINYINT,

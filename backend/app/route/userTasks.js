@@ -18,4 +18,6 @@ module.exports = (app) =>{
     app.get('/api/getUsersInTask/:task_id',[authJwt.verifyToken],userTasks.findUsersInTask);
 
     app.post('/api/uploadTask/:id',[authJwt.verifyToken],userTasks.uploadFile);
+
+    app.post('/api/checkSql',[authJwt.verifyToken],userTasks.findSql);
 }

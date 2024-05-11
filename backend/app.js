@@ -34,4 +34,6 @@ var userTasks = require('./app/route/userTasks');
 userTasks(app);
 var auth = require('./app/route/auth.js');
 auth(app);
+var testcase = require('./app/route/testcase');
+testcase(app);
 app.listen(2000);

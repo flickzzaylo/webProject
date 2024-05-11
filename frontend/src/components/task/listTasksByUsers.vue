@@ -14,6 +14,7 @@
           <th>Пользователь</th>
           <th>Комментарий</th>
           <th>Загрузить файл</th>
+          <th>Проверить базу данных</th>
           <th>Отметка выполнено</th>
           <th>Удалить</th>
           <th><button v-on:click="showUserModal">Добавить студентов к заданию</button></th>
@@ -35,6 +36,9 @@
               (архив)
               </a>
             </div>
+          </td>
+          <td>
+            <button v-on:click="checkSql(task.file)">Проверить</button>
           </td>
           <td><input type="checkbox" :true-value="1" :false-value="0" v-model="task.isComplete" v-on:click="switchCheckbox(task.id)"></td>
           <td>
@@ -61,6 +65,21 @@
           <button v-on:click="deleteTask()">Удалить</button>
         </div>
       </form>
+      </div>
+      <div>
+        <h4>Тесткейсы</h4>
+        <ul>
+          <li v-for="(testcase,index) in testcases" :key="index">
+              {{testcase.input}}
+            <button v-on:click="deleteTestcase(testcase.id)">🗑️</button>
+          </li>
+        </ul>
+        <div>
+          <form @submit="addTestcase">
+              <input type="text" placeholder="Запрос к базе данных" required v-model="inputToTestcase">
+              <button type="submit">Добавить</button>
+          </form>
+        </div>
       </div>
     </th>
     </tr>
@@ -94,7 +113,9 @@ export default {
         },
         isModalVisible: false,
         selectedTaskId: null,
-        isUserModalVisible: false
+        isUserModalVisible: false,
+        testcases: [],
+        inputToTestcase: ""
       };
     },
   methods: {
@@ -107,6 +128,40 @@ export default {
           })
           .catch(e=>{
             console.log(e)
+          })
+    },
+    async checkSql(file){
+      const data = {
+        fileName: file,
+        task_id: this.id
+      };
+      try{
+        const res = await http.post('/checkSql',data);
+        console.log(res);
+      }
+      catch (e){
+        console.log(e);
+      }
+    },
+    getTestCasesToTask(){
+      http.get(`/testcasesByTask/${this.id}`)
+          .then(response=>{
+            this.testcases = response.data;
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+    },
+    async addTestcase(e){
+      e.preventDefault();
+      var data = {
+        task_id: this.id,
+        input: this.inputToTestcase
+      }
+      http.post('/addTestcase',data)
+          .then(window.location.reload())
+          .catch(e=>{
+            console.log(e);
           })
     },
     async uploadFile(id){
@@ -126,6 +181,15 @@ export default {
           .catch((e)=>{
             console.log(e);
           })
+    },
+    deleteTestcase(id){
+      console.log(id);
+      http.post(`/deleteTestcase/${id}`)
+          .then()
+          .catch(e=>{
+            console.log(e);
+          })
+      window.location.reload();
     },
     async getTask(id){
       try {
@@ -203,6 +267,7 @@ export default {
     this.currentUserRole();
     this.getUsersByTask();
     this.getTask(this.id);
+    this.getTestCasesToTask(this.id);
   }
 }
 </script>

@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     output: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     }
   });
 };

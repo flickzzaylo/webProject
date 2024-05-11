@@ -6,6 +6,11 @@ var UserTasks = db.user_tasks;
 var multiparty = require('multiparty');
 var fs = require('fs');
 var uuid = require('uuid');
+const path = require("path");
+var unzipper = require('unzipper')
+const mysql = require('mysql2/promise')
+const axios = require("axios");
+const {file} = require("unzipper/lib/Open");
 
 exports.findAll = (req, res) => {
     UserTasks.findAll()
@@ -157,10 +162,72 @@ exports.uploadFile = async (req,res)=>{
     })
 }
 
-// exports.addUser = async (req,res) => {
-//     try{
-//         const data = await db.sequelize.query(`INSERT`)
-//     }catch (e){
-//
-//     }
-// }
+async function importSql(fileName,task_id){
+    try {
+        const requestTC = await axios.create({
+            baseURL: "http://localhost:2000/api",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).get(`/testcasesByTask/${task_id}`);
+        const testcases = requestTC.data;
+        console.log(testcases)
+        const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: ''
+        });
+
+        var schemes = await connection.query(`SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'test_online_compiler'`);
+        connection.query('SET FOREIGN_KEY_CHECKS = 0');
+        if (schemes[0].length > 0) {
+            await connection.query('USE test_online_compiler');
+            const tables = await connection.query('SHOW TABLES');
+            for (let table of tables[0]) {
+                // console.error(table)
+                await connection.query(`DROP TABLE ${table.Tables_in_test_online_compiler}`);
+            }
+        } else {
+            await connection.execute('CREATE DATABASE test_online_compiler');
+        }
+        connection.query('SET FOREIGN_KEY_CHECKS = 1');
+        var dumpContent = fs.readFileSync(`./output/${fileName}`, 'utf8');
+        dumpContent = dumpContent.split('\n').filter(line => !line.includes('SET SQL_MODE') && !line.includes('SET time_zone') && !line.includes('/*!')).join('\n');
+        const queries = dumpContent.split(';').filter(query => query.trim() !== '');
+        for (const query of queries) {
+            await connection.query(query);
+        }
+        for(let i = 0;i<testcases.length;i++){
+            let request = testcases[i].input;
+            const rows = await connection.query(request);
+            console.log(rows[0]);
+        }
+        connection.end();
+        return 'Succesful';
+    } catch (err) {
+        return err;
+    }
+}
+
+exports.findSql = (req,res) =>{
+    let result;
+    try {
+        fs.createReadStream(`./files/${req.body.fileName}`)
+            .pipe(unzipper.Parse())
+            .on('entry', async function (entry) {
+                const filePath = entry.path;
+                const fileName = path.basename(filePath)
+                const type = entry.type;
+                const size = entry.vars.uncompressedSize;
+                if (path.extname(fileName) === ".sql") {
+                    await entry.pipe(fs.createWriteStream(`./output/${fileName}`));
+                    result = await importSql(fileName, req.body.task_id);
+                } else {
+                    entry.autodrain();
+                }
+            });
+        globalFunctions.sendResult(res,'result');
+    }catch (e){
+        globalFunctions.sendError(res,e);
+    }
+}
