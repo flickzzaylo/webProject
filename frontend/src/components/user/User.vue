@@ -1,38 +1,42 @@
 <template>
-    <div v-if="user && this.role===3">
-        <h4>Данные пользователя</h4>
-        <form @submit="updateUser">
+    <div v-if="user && this.role===3" class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="text-center">
+            <h3 class="text-white mb-3" style="background-color: #007bff; padding: 10px;">Данные пользователя</h3>
+        <form @submit="updateUser" class="text-left">
+          <div class="form-group">
+                <label for="name" class="text-dark">Логин:</label>
+                <input type="text" name="login" id="login" placeholder="Логин" required v-model="user.login" class="form-control">
             <div>
-                <input type="text" name="login" id="login" placeholder="Логин" required v-model="user.login">
-            </div>
-<!--            <div>-->
-<!--                <input type="text" name="password" id="password" placeholder="Логин" required v-model="user.password">-->
-<!--            </div>-->
-            <div>
-                <select class="form-select" required v-model="user.role_id">
+              <label for="name" class="text-dark">Роль:</label>
+                <select class="form-control form-control-dark" required v-model="user.role_id">
                     <option value="" disabled selected>Выберите роль</option>
                     <option v-for="role in roles" v-bind:key="role.id" v-bind:value="role.id">
                         {{role.name}}
                     </option>
                 </select>
             </div>
-            <div>
-                <input type="submit" value="Обновить">
+          </div>
+            <div class="row mt-3">
+            <div class="col">
+              <button type="submit" value="Обновить" class="btn btn-primary btn-block">Обновить</button>
             </div>
-            <div>
-                <button v-on:click="deleteUser()">Удалить</button>
+            <div class="col">
+                <button v-on:click="deleteUser()" class="btn btn-danger btn-block">Удалить</button>
+            </div>
             </div>
         </form>
     </div>
-    <div v-else>
-        <br>
-        <p>Выберите студента</p>
+        </div>
+      </div>
     </div>
 </template>
 
 <script>
     import http from "../../http-common";
     import {userRole} from "@/mixins/currentUser";
+    import '@/components/styles/dataStyle.css'
     export default {
         name: "user-details",
         props: ['id'],

@@ -222,11 +222,11 @@ exports.findSql = (req,res) =>{
                 if (path.extname(fileName) === ".sql") {
                     await entry.pipe(fs.createWriteStream(`./output/${fileName}`));
                     result = await importSql(fileName, req.body.task_id);
+                    globalFunctions.sendResult(res,result);
                 } else {
                     entry.autodrain();
                 }
             });
-        globalFunctions.sendResult(res,'result');
     }catch (e){
         globalFunctions.sendError(res,e);
     }

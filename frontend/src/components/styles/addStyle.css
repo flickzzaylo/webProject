@@ -1,0 +1,20 @@
+.form-control-dark {
+    background-color: aliceblue !important;
+    color: #000;
+    border-color: #6c757d;
+}
+
+.form-control-dark:focus {
+    border-color: #007bff !important;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3 !important;
+    border-color: #004999 !important;
+}
+
+.btn-secondary:hover {
+    background-color: #adb5bd !important;
+    border-color: #868e96 !important;
+}

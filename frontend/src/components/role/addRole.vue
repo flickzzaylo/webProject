@@ -1,27 +1,37 @@
 <template>
-    <div v-if="this.role===3">
-        Добавление роли
+    <div v-if="this.role===3" class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="text-center">
+            <h3 class="text-white mb-3" style="background-color: #007bff; padding: 10px;">Добавление роли</h3>
         <div v-if="!submitted">
-            <form @submit="addRole">
-                <input type="text" name="name" id="name" placeholder="Наименование роли" required v-model="roleUser.name">
-                <input type="submit" value="Добавить">
+            <form @submit="addRole" class="text-left">
+              <div class="form-group">
+                <label for="name" class="text-dark">Наименование роли:</label>
+                <input type="text" name="name" id="name" placeholder="Наименование роли" required v-model="roleUser.name" class="form-control form-control-dark">
+              </div>
+              <button class="btn btn-primary btn-block mt-3" type="submit" value="Добавить">Добавить</button>
             </form>
         </div>
         <div v-else>
-            <h4>Запись добавлена</h4>
-            <div>
-                <button v-on:click="newRole">Добавить новую роль</button>
+            <h4 class="text-center">Запись добавлена</h4>
+            <div class="text-center">
+                <button class="btn btn-primary btn-block mt-3" v-on:click="newRole">Добавить новую роль</button>
             </div>
-            <div>
-                <router-link class="item" to="/listRoles">Вернуться к списку ролей</router-link>
+            <div class="text-center mt-3">
+                <router-link class="btn btn-secondary btn-block" to="/listRoles">Вернуться к списку ролей</router-link>
             </div>
         </div>
+    </div>
+        </div>
+      </div>
     </div>
 </template>
 
 <script>
 import http from "../../http-common"
 import {userRole} from "@/mixins/currentUser";
+import '@/components/styles/addStyle.css'
 export default{
     name:"AddRole",
   mixins:[userRole],

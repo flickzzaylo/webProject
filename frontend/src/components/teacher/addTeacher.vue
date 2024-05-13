@@ -1,22 +1,28 @@
 <template>
-    <div v-if="this.role===3">
-        <h4>Добавление преподавателей</h4>
-        <form @submit="addTeacher">
-            <div>
-                <input type="text" name="name" id="name" placeholder="ФИО" required v-model="teacher.name">
-            </div>
-            <div>
-                <select class="form-select" required v-model="teacher.user_id">
+    <div v-if="this.role===3" class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="text-center">
+            <h3 class="text-white mb-3" style="background-color: #007bff; padding: 10px;">Добавление преподавателей</h3>
+        <form @submit="addTeacher" class="text-left">
+          <div class="form-group">
+            <label for="name" class="text-dark">Фамилия Имя Отчество:</label>
+            <input type="text" name="name" id="name" placeholder="ФИО" required v-model="teacher.name" class="form-control form-control-dark">
+          </div>
+            <div class="form-group">
+              <label for="name" class="text-dark">Логин преподавателя:</label>
+                <select class="form-control form-control-dark" required v-model="teacher.user_id">
                     <option value="" disabled selected>Выберите пользователя</option>
                     <option class="form-select" v-for="user in users" v-bind:key="user.id" v-bind:value="user.id">
                         {{user.login}}
                     </option>
                 </select>
             </div>
-            <div>
-                <input type="submit" value="Добавить">
-            </div>
+          <button type="submit" value="Добавить" class="btn btn-primary btn-block mt-3">Добавить</button>
         </form>
+          </div>
+        </div>
+      </div>
     </div>
 </template>
 

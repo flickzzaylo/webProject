@@ -1,15 +1,20 @@
 <template>
-  <div class="col-md-5">
-    <h4 class="mx-auto mt-4">Вход в систему</h4>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="text-center">
+          <h3 class="text-white mb-3" style="background-color: #007bff; padding: 10px;">Вход в систему</h3>
     <form name="form" @submit="handleLogin">
       <div class="form-group">
+        <label for="name" class="text-dark">Логин:</label>
         <input type="text" class="form-control" name="username" placeholder="Логин" v-model="user.login" required/>
       </div>
       <div class="form-group">
+        <label for="name" class="text-dark">Пароль:</label>
         <input type="password" class="form-control" name="password" placeholder="Пароль" v-model="user.password" required/>
       </div>
       <div class="form-group">
-        <button class="btn btn-primary" :disabled="loading">
+        <button class="btn btn-primary btn-block mt-3" :disabled="loading">
           <span v-show="loading" class="spinner-border spinner-border-sm"></span>
           <span>Войти</span>
         </button>
@@ -19,9 +24,14 @@
       </div>
     </form>
   </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
+import '@/components/styles/addStyle.css'
 export default {
+
   name: 'LoginUser',
   data() {
     return {
