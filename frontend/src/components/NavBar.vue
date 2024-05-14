@@ -61,6 +61,9 @@ export default {
   },
   mounted() {
     this.currentUserRole();
+    // if(this.role===null){
+    //   this.logOut();
+    // }
   }
 };
 </script>

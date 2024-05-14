@@ -1,51 +1,38 @@
 <template>
-
   <transition name="modal-fade">
     <div class="modal-backdrop">
       <form @submit="updateUserTask">
-      <div class="modal"
-           role="dialog"
-           aria-labelledby="modalTitle"
-           aria-describedby="modalDescription"
-      >
-        <header
-            class="modal-header"
-            id="modalTitle"
-        >
-          <slot name="header">
-            <table>
-              <tr>
-                <th>Редактирование комментарий</th>
-                <th>            <button
-                    type="button"
-                    class="btn-close"
-                    @click="close"
-                    aria-label="Close modal"
-                >
-                  x
-                </button></th>
-              </tr>
-            </table>
-          </slot>
-        </header>
-        <section
-            class="modal-body"
-            id="modalDescription"
-        >
-          <slot name="body">
-            <textarea style="resize: none;width: 100%;height: 200px" v-model="this.userTask.comment"/>
-          </slot>
-        </section>
-        <footer class="modal-footer">
-          <slot name="footer">
-            <input type="submit" value="Добавить/Обновить комментарий">
-          </slot>
-        </footer>
-      </div>
+        <div class="modal" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDescription">
+          <header class="modal-header" id="modalTitle">
+            <slot name="header">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="text-white" style="text-align: center; width: 100%;">Редактирование комментария</h2>
+                <button type="button" class="btn-close text-white" @click="close" aria-label="Close modal">
+
+                </button>
+              </div>
+            </slot>
+          </header>
+          <section class="modal-body" id="modalDescription">
+            <slot name="body">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <textarea class="form-control" style="resize: none; height: 200px; width: 80%;" v-model="this.userTask.comment"></textarea>
+              </div>
+            </slot>
+          </section>
+          <footer class="modal-footer">
+            <slot name="footer">
+              <div style="display: flex; justify-content: center;">
+                <button type="submit" class="btn btn-primary">Добавить/Обновить комментарий</button>
+              </div>
+            </slot>
+          </footer>
+        </div>
       </form>
     </div>
   </transition>
 </template>
+
 <script>
 import http from "../../http-common";
 export default {
@@ -90,7 +77,8 @@ export default {
   }
 };
 </script>
-<style>
+
+<style scoped>
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -109,36 +97,33 @@ export default {
   overflow-x: auto;
   display: flex;
   flex-direction: column;
-}
-
-.modal-header,
-.modal-footer {
-  padding: 40px;
-  display: flex;
+  border-radius: 10px;
+  width: 30%; /* Added this line */
 }
 
 .modal-header {
-  border-bottom: 1px solid #eeeeee;
-  justify-content: center;
+  background-color: #007bff;
+  border-bottom: none;
+  padding: 20px;
 }
 
 .modal-footer {
-  border-top: 1px solid #eeeeee;
-  justify-content: center;
-}
-
-.modal-body {
-  position: relative;
-  padding: 10px 10px;
+  border-top: none;
+  padding: 20px;
 }
 
 .btn-close {
-  border: none;
-  font-size: 20px;
-  padding: 15px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #4AAE9B;
-  background: transparent;
+  color: #ffffff;
+  opacity: 1;
+}
+
+.modal-enter,
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.5s;
 }
 </style>

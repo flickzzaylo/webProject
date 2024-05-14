@@ -1,52 +1,37 @@
 <template>
-
   <transition name="modal-fade">
     <div class="modal-backdrop">
       <form @submit="updateUserTask">
-        <div class="modal"
-             role="dialog"
-             aria-labelledby="modalTitle"
-             aria-describedby="modalDescription"
-        >
-          <header
-              class="modal-header"
-              id="modalTitle"
-          >
+        <div class="modal" role="dialog" aria-labelledby="modalTitle" aria-describedby="modalDescription">
+          <header class="modal-header" id="modalTitle">
             <slot name="header">
-              <table>
-                <tr>
-                  <th>Добавить пользователя</th>
-                  <th>            <button
-                      type="button"
-                      class="btn-close"
-                      @click="close"
-                      aria-label="Close modal"
-                  >
-                    x
-                  </button></th>
-                </tr>
-              </table>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="text-white" style="text-align: center; width: 100%;">Добавить пользователя</h2>
+                <button type="button" class="btn-close text-white" @click="close" aria-label="Close modal">
+
+                </button>
+              </div>
             </slot>
           </header>
-          <section
-              class="modal-body"
-              id="modalDescription"
-          >
+          <section class="modal-body" id="modalDescription">
             <slot name="body">
-              <div style="height: 200px; overflow-y: scroll; border: 1px solid #ccc;">
-                <ul style="list-style: none; padding: 0; margin: 0;" v-for="(user,index) in users" :key="index">
-                  <li style="border-bottom: 1px solid #ccc;">
-                    <template v-if="!usersInTask.includes(user.id)">
-                      {{user.login}} <button v-on:click="addUser(user.id)">Добавить</button>
-                    </template>
+              <div class="row">
+              <div style="align-items: center; justify-content: center;">
+                <ul class="list-group text-center" v-for="(user,index) in users" :key="index">
+                  <li v-if="!usersInTask.includes(user.id)" class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{user.login}}</span>
+                    <button class="btn btn-sm btn-outline-success" v-on:click="addUser(user.id)">Добавить</button>
                   </li>
                 </ul>
+              </div>
               </div>
             </slot>
           </section>
           <footer class="modal-footer">
             <slot name="footer">
-              <input type="submit" value="Сохранить">
+              <div style="display: flex; justify-content: center;">
+                <button type="submit" class="btn btn-primary">Добавить пользователей</button>
+              </div>
             </slot>
           </footer>
         </div>
@@ -135,7 +120,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -154,36 +139,33 @@ export default {
   overflow-x: auto;
   display: flex;
   flex-direction: column;
-}
-
-.modal-header,
-.modal-footer {
-  padding: 40px;
-  display: flex;
+  border-radius: 10px;
+  width: 30%; /* Added this line */
 }
 
 .modal-header {
-  border-bottom: 1px solid #eeeeee;
-  justify-content: center;
+  background-color: #007bff;
+  border-bottom: none;
+  padding: 20px;
 }
 
 .modal-footer {
-  border-top: 1px solid #eeeeee;
-  justify-content: center;
-}
-
-.modal-body {
-  position: relative;
-  padding: 10px 10px;
+  border-top: none;
+  padding: 20px;
 }
 
 .btn-close {
-  border: none;
-  font-size: 20px;
-  padding: 15px;
-  cursor: pointer;
-  font-weight: bold;
-  color: #4AAE9B;
-  background: transparent;
+  color: #ffffff;
+  opacity: 1;
+}
+
+.modal-enter,
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.5s;
 }
 </style>
