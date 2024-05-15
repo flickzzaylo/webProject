@@ -20,4 +20,6 @@ module.exports = (app) =>{
     app.post('/api/uploadTask/:id',[authJwt.verifyToken],userTasks.uploadFile);
 
     app.post('/api/checkSql',[authJwt.verifyToken],userTasks.findSql);
+
+    app.post('/api/checkBackend',[authJwt.verifyToken],userTasks.checkBackend);
 }

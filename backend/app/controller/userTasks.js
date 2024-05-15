@@ -11,6 +11,11 @@ var unzipper = require('unzipper')
 const mysql = require('mysql2/promise')
 const axios = require("axios");
 const {file} = require("unzipper/lib/Open");
+const fsExtra = require('fs-extra');
+const AdmZip = require('adm-zip')
+const {exec} = require('child_process');
+const swaggerAutogen = require('swagger-autogen')();
+
 
 exports.findAll = (req, res) => {
     UserTasks.findAll()
@@ -217,6 +222,7 @@ exports.findSql = (req,res) =>{
             .on('entry', async function (entry) {
                 const filePath = entry.path;
                 const fileName = path.basename(filePath)
+                const dirName = path.dirname(filePath);
                 const type = entry.type;
                 const size = entry.vars.uncompressedSize;
                 if (path.extname(fileName) === ".sql") {
@@ -229,5 +235,157 @@ exports.findSql = (req,res) =>{
             });
     }catch (e){
         globalFunctions.sendError(res,e);
+    }
+}
+
+
+exports.checkBackend = async (req,res) =>{
+    try {
+        const pathToUnzip = path.resolve('./output')
+        const archive = path.resolve("./files", `${req.body.fileName}`)
+        const zip = new AdmZip(archive);
+        const backendEntry = zip.getEntry("backend/");
+        let projectInFolder, baseFolder;
+        if (backendEntry) {
+            projectInFolder = false
+        } else {
+        const entries = zip.getEntries();
+        baseFolder = entries[0].entryName.split('/')[0];
+        projectInFolder = true;
+        }
+        await zip.extractAllToAsync(pathToUnzip, true);
+
+
+        const outputFile = './app/controller/swagger.json';
+        let endpointsFiles;
+        if(projectInFolder){
+            endpointsFiles = [`./output/${baseFolder}/backend/app/route/*.js`];
+        }else{
+            endpointsFiles = [`./output/backend/app/route/*.js`];
+        }
+        const doc = {
+            info: {
+                title: 'Tasks',
+                version: '1.0.0',
+                description: '',
+            },
+            host: 'localhost:3000',
+            basePath: '/',
+            schemes: ['http'],
+            consumes: ['application/json'],
+            produces: ['application/json'],
+        };
+        let result = await swaggerAutogen(outputFile, endpointsFiles, doc);
+        console.log(result)
+        const controllers = JSON.parse(fs.readFileSync('./app/controller/swagger.json'));
+        const paths = controllers.paths;
+
+
+        let testFile = {
+            "info": {
+                "_postman_id": "cd76c08d-7a26-48dc-93c9-74cce78cd3ee",
+                "name": "online_compiler",
+                "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+                "_exporter_id": "33817202"
+            },
+            "item": [
+
+            ]
+        };
+        let sample = {
+            "name": "",
+            "protocolProfileBehavior": {
+                "disableBodyPruning": true
+            },
+            "request": {
+                "method": "",
+                "header": [
+                    {
+                        "key": "x-access-token",
+                        "value": "testtoken",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": `${doc.host}/api/listDisciplines`,
+                    "host": [
+                        `${doc.host.split(':')[0]}`
+                    ],
+                    "port": `${doc.host.split(':')[1]}`,
+                    "path": [
+                        "api",
+                        "listDisciplines"
+                    ]
+                }
+            },
+            "response": []
+        }
+        for (let path in paths) {
+            let controllerName, controllerMethod, controllerPath;
+            controllerName = path.split('/')[2];
+            const replacer = /\{[^}]+\}/g;
+            controllerPath = path.replace(replacer,1);
+            let samplePath = JSON.parse(JSON.stringify(sample));
+            if(paths[path].get){
+                let temp = {
+                    "name": `${controllerName}`,
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    },
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "x-access-token",
+                                "value": "testtoken",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": `${doc.host}${controllerPath}`,
+                            "host": [
+                                `${doc.host.split(':')[0]}`
+                            ],
+                            "port": `${doc.host.split(':')[1]}`,
+                            "path": [
+                                "api",
+                                `${controllerName}`
+                            ]
+                        }
+                    },
+                    "response": []
+                }
+                testFile.item.push(temp);
+            }
+            if (paths[path].post) {
+                const postRequest = paths[path].post;
+                if (postRequest.parameters) {
+                    const parameters = postRequest.parameters;
+                    console.log(parameters);
+                }
+            }
+        }
+        console.log(testFile.item)
+    }
+    catch (e){
+        console.log(e);
     }
 }

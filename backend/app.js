@@ -1,5 +1,7 @@
 var express = require('express');
 var app = express();
+// const swaggerUi = require('swagger-ui-express');
+// const swaggerDocument = require('./app/controller/swagger.json');
 var bodyParser = require('body-parser');
 var db = require('./app/config/db.config.js');
 app.use(bodyParser.json());
@@ -13,6 +15,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 db.sequelize.sync({force: false});
 app.use(express.static("files"));
+// app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 /////
 var compiler = require('./app/route/compiler.js');
 compiler(app);
@@ -50,4 +53,4 @@ app._router.stack.forEach(function(middleware){
         });
     }
 });
-console.log(routes)
+// console.log(routes)

@@ -49,7 +49,7 @@
               </button>
             </td>
             <td>
-<!--              <input type="file" :ref="'file_' + index" accept=".zip, .rar" v-on:change="uploadFile(task.id)">-->
+              <input type="file" :ref="'file_' + index" accept=".zip, .rar" v-on:change="uploadFile(task.id)">
               <div v-if="task.file">
                 <a :href="this.globalVariables.serverUrl + task.file" download>
                   <button class="btn btn-sm btn-outline-primary">Скачать</button>
@@ -62,7 +62,9 @@
               <div v-if="sqlCheckMessage!=='' && checkingTaskId===task.id">{{sqlCheckMessage}}</div>
             </td>
             <td>
-
+              <span v-if="checkingTaskId===task.id" v-show="backendLoading" class="spinner-border spinner-border-sm"/>
+              <button class="btn btn-sm btn-outline-primary" v-if="task.file" v-on:click="checkBackend(task.file, task.id)">Проверить</button>
+              <div v-if="sqlCheckMessage!=='' && checkingTaskId===task.id">{{sqlCheckMessage}}</div>
             </td>
             <td class="form-switch">
               <input class="form-check-input" type="checkbox" :true-value="1" :false-value="0" v-model="task.isComplete" v-on:click="switchCheckbox(task.id)">
@@ -94,100 +96,6 @@
       </div>
     </div>
   </div>
-
-
-
-
-
-<!--  <table style="table-layout: fixed; width: 100%;">-->
-<!--    <thead>-->
-<!--    <tr>-->
-<!--    <th>Таблица студентов</th>-->
-<!--    <th>Редактирование задания</th>-->
-<!--    </tr>-->
-<!--    </thead>-->
-<!--    <tr>-->
-<!--    <th style="width: 80%;">-->
-<!--      <table border="1">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--          <th>Пользователь</th>-->
-<!--          <th>Комментарий</th>-->
-<!--          <th>Загрузить файл</th>-->
-<!--          <th>Проверить базу данных</th>-->
-<!--          <th>Отметка выполнено</th>-->
-<!--          <th>Удалить</th>-->
-<!--          <th><button v-on:click="showUserModal">Добавить студентов к заданию</button></th>-->
-<!--          <userModal v-show="isUserModalVisible" :id="this.id" @close="closeUserModal"/>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr v-for="(task,index) in userTasks" :key="index">-->
-<!--          <td>{{task.login}}</td>-->
-<!--          <td>-->
-<!--            <button type="button" v-on:click="showModal(task.id)" :class="{'has-comment': task.comment && task.comment.length>0}">-->
-<!--                {{ task.comment && task.comment.length > 0 ? commentSlice(task.comment) : 'Добавить комментарий' }}-->
-<!--            </button>-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <input type="file" :ref="'file_' + index" accept=".zip, .rar" v-on:change="uploadFile(task.id)">-->
-<!--            <div v-if="task.file">-->
-<!--              <a :href="this.globalVariables.serverUrl + task.file" download>-->
-<!--              (архив)-->
-<!--              </a>-->
-<!--            </div>-->
-<!--          </td>-->
-<!--          <td>-->
-<!--            <button v-if="task.file" v-on:click="checkSql(task.file, task.id)">Проверить</button>-->
-<!--            <div v-if="sqlCheckMessage!=='' && checkingTaskId===task.id">{{sqlCheckMessage}}</div>-->
-<!--          </td>-->
-<!--          <td><input type="checkbox" :true-value="1" :false-value="0" v-model="task.isComplete" v-on:click="switchCheckbox(task.id)"></td>-->
-<!--          <td>-->
-<!--            <button v-on:click="deleteUser(task.id)">Удалить</button>-->
-<!--          </td>-->
-<!--          <modal v-show="isModalVisible && selectedTaskId===task.id" :id="task.id" @close="closeModal"/>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
-<!--    </th>-->
-<!--    <th style="width: 20%;">-->
-<!--      <div>-->
-<!--      <form @submit="updateTask">-->
-<!--        <div>-->
-<!--          <textarea style="resize: none;width: 60%;height: 10%" type="text" placeholder="Название" required v-model="this.task.name"></textarea>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--          <textarea style="resize: none;width: 60%;height: 10%" type="text" placeholder="Описание" required v-model="this.task.description"></textarea>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--          <input type="submit" value="Обновить">-->
-<!--        </div>-->
-<!--        <div >-->
-<!--          <button v-on:click="deleteTask()">Удалить</button>-->
-<!--        </div>-->
-<!--      </form>-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <h4>Тесткейсы</h4>-->
-<!--        <ul>-->
-<!--          <li v-for="(testcase,index) in testcases" :key="index">-->
-<!--              {{testcase.input}}-->
-<!--            <button v-on:click="deleteTestcase(testcase.id)">🗑️</button>-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--        <div>-->
-<!--          <form @submit="addTestcase">-->
-<!--              <input type="text" placeholder="Запрос к базе данных" required v-model="inputToTestcase">-->
-<!--              <button type="submit">Добавить</button>-->
-<!--          </form>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </th>-->
-<!--    </tr>-->
-<!--  </table>-->
-
-
-
 </template>
 
 <script>
@@ -219,7 +127,8 @@ export default {
         inputToTestcase: "",
         sqlCheckMessage: "",
         checkingTaskId: null,
-        sqlLoading: false
+        sqlLoading: false,
+        backendLoading: false
       };
     },
   methods: {
@@ -256,6 +165,19 @@ export default {
       catch (e){
         console.log(e);
       }
+    },
+    checkBackend(file, task_id){
+      this.backendLoading = true;
+      this.checkingTaskId = task_id;
+      const data = {
+        fileName: file,
+      }
+      http.post('/checkBackend',data).then(obj=>{
+        console.log(obj);
+      })
+          .catch(e=>{
+            console.log(e);
+          })
     },
     getTestCasesToTask(){
       http.get(`/testcasesByTask/${this.id}`)

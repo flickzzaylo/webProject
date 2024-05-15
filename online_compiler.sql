@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Май 10 2024 г., 06:00
+-- Время создания: Май 15 2024 г., 16:42
 -- Версия сервера: 10.4.32-MariaDB
 -- Версия PHP: 8.2.12
 
@@ -157,6 +157,14 @@ CREATE TABLE `testcase` (
   `output` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+--
+-- Дамп данных таблицы `testcase`
+--
+
+INSERT INTO `testcase` (`id`, `task_id`, `input`, `output`) VALUES
+(14, 2, 'select * from student', ''),
+(15, 2, 'select * from discipline', '');
+
 -- --------------------------------------------------------
 
 --
@@ -211,11 +219,12 @@ CREATE TABLE `user_tasks` (
 --
 
 INSERT INTO `user_tasks` (`id`, `task_id`, `user_id`, `mark`, `comment`, `file`, `mime_type`, `isComplete`) VALUES
-(1, 2, 7, NULL, 'S', '', '', 1),
+(1, 2, 7, NULL, 'Sasdasd', 'c7e86832-8e11-4407-b7d1-1c73ff515d09.x-zip-compressed', 'application/x-zip-compressed', 1),
 (3, 2, 4, NULL, 'куккк', '', '', 0),
 (23, 4, 4, NULL, 'фывфыв', NULL, '', 0),
 (24, 4, 5, NULL, '', NULL, '', 0),
-(25, 2, 5, NULL, 'asd', '', '', 0);
+(33, 2, 5, NULL, '', NULL, '', 0),
+(34, 2, 10, NULL, '', NULL, '', 0);
 
 --
 -- Индексы сохранённых таблиц
@@ -292,13 +301,13 @@ ALTER TABLE `user_tasks`
 -- AUTO_INCREMENT для таблицы `discipline`
 --
 ALTER TABLE `discipline`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `prog_language`
 --
 ALTER TABLE `prog_language`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `role`
@@ -316,31 +325,31 @@ ALTER TABLE `task`
 -- AUTO_INCREMENT для таблицы `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `teacher_discipline`
 --
 ALTER TABLE `teacher_discipline`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `testcase`
 --
 ALTER TABLE `testcase`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT для таблицы `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT для таблицы `user_tasks`
 --
 ALTER TABLE `user_tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
