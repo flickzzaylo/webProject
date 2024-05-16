@@ -249,20 +249,20 @@ exports.checkBackend = async (req,res) =>{
         if (backendEntry) {
             projectInFolder = false
         } else {
-        const entries = zip.getEntries();
-        baseFolder = entries[0].entryName.split('/')[0];
-        projectInFolder = true;
+            const entries = zip.getEntries();
+            baseFolder = entries[0].entryName.split('/')[0];
+            projectInFolder = true;
         }
-        await zip.extractAllToAsync(pathToUnzip, true);
-
-
+        zip.extractAllToAsync(pathToUnzip, true);
         const outputFile = './app/controller/swagger.json';
         let endpointsFiles;
         if(projectInFolder){
-            endpointsFiles = [`./output/${baseFolder}/backend/app/route/*.js`];
+            // endpointsFiles = [`./output/${baseFolder}/backend/app/route/*.js`];
+            endpointsFiles = [`./output/backend/app/route/*.js`];
         }else{
             endpointsFiles = [`./output/backend/app/route/*.js`];
         }
+        console.log(endpointsFiles);
         const doc = {
             info: {
                 title: 'Tasks',
@@ -332,7 +332,7 @@ exports.checkBackend = async (req,res) =>{
         for (let path in paths) {
             let controllerName, controllerMethod, controllerPath;
             controllerName = path.split('/')[2];
-            const replacer = /\{[^}]+\}/g;
+            const replacer =  /\{[^}]+\}/;
             controllerPath = path.replace(replacer,1);
             let samplePath = JSON.parse(JSON.stringify(sample));
             if(paths[path].get){
@@ -376,14 +376,110 @@ exports.checkBackend = async (req,res) =>{
                 testFile.item.push(temp);
             }
             if (paths[path].post) {
+                let controllerType;
                 const postRequest = paths[path].post;
-                if (postRequest.parameters) {
-                    const parameters = postRequest.parameters;
-                    console.log(parameters);
+                const length = postRequest.parameters.length
+                let parameters = postRequest.parameters[length-1].schema;
+                // console.log(parameters);
+                // 6479
+                if(parameters===undefined){
+                    if(path.includes('delete')){
+                        parameters = null;
+                        let temp = {
+                            "name": `${controllerName}`,
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            },
+                            "request": {
+                                "method": "POST",
+                                "header": [
+                                    {
+                                        "key": "x-access-token",
+                                        "value": "testtoken",
+                                        "type": "text"
+                                    }
+                                ],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                },
+                                "url": {
+                                    "raw": `${doc.host}${controllerPath}`,
+                                    "host": [
+                                        `${doc.host.split(':')[0]}`
+                                    ],
+                                    "port": `${doc.host.split(':')[1]}`,
+                                    "path": [
+                                        "api",
+                                        `${controllerName}`
+                                    ]
+                                }
+                            },
+                            "response": []
+                        }
+                        testFile.item.push(temp);
+                    }
+                }else{
+                    let temp = {
+                        "name": `${controllerName}`,
+                        "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                        },
+                        "request": {
+                            "method": "POST",
+                            "header": [
+                                {
+                                    "key": "x-access-token",
+                                    "value": "testtoken",
+                                    "type": "text"
+                                }
+                            ],
+                            "body": {
+                                "mode": "raw",
+                                "raw": "",
+                                "options": {
+                                    "raw": {
+                                        "language": "json"
+                                    }
+                                }
+                            },
+                            "url": {
+                                "raw": `${doc.host}${controllerPath}`,
+                                "host": [
+                                    `${doc.host.split(':')[0]}`
+                                ],
+                                "port": `${doc.host.split(':')[1]}`,
+                                "path": [
+                                    "api",
+                                    `${controllerName}`
+                                ]
+                            }
+                        },
+                        "response": []
+                    }
+                    let data = "{"
+                    for(let field in parameters.properties){
+                        data += `"${field}": "1",`
+                    }
+                    data = data.substring(0, data.length - 1);
+                    data+="}"
+                    temp.request.body.raw+=data;
+                    testFile.item.push(temp)
                 }
             }
         }
-        console.log(testFile.item)
+        const jsonOutput = JSON.stringify(testFile, null, 2);
+        fs.writeFile('output.json', jsonOutput, (err) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+        });
     }
     catch (e){
         console.log(e);
