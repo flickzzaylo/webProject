@@ -332,9 +332,11 @@ exports.checkBackend = async (req,res) =>{
         for (let path in paths) {
             let controllerName, controllerMethod, controllerPath;
             controllerName = path.split('/')[2];
-            const replacer =  /\{[^}]+\}/;
-            controllerPath = path.replace(replacer,1);
-            let samplePath = JSON.parse(JSON.stringify(sample));
+            const replacer = /\{([^{}=]+)(?:=([^{}]+))?\}/g;
+            controllerPath = path.replace(replacer, (match, p1, p2) => {
+                return p2 ? p2 + "=1" : "1";
+            });
+            console.log(controllerPath);
             if(paths[path].get){
                 let temp = {
                     "name": `${controllerName}`,
@@ -366,13 +368,19 @@ exports.checkBackend = async (req,res) =>{
                             ],
                             "port": `${doc.host.split(':')[1]}`,
                             "path": [
-                                "api",
-                                `${controllerName}`
                             ]
                         }
                     },
                     "response": []
                 }
+                let paths = temp.request.url.path;
+                // console.log(controllerPath);
+                // console.log(controllerPath.split('/'));
+                for(let fieldPath = 1;fieldPath<controllerPath.split('/').length;fieldPath++) {
+                    const path_temp = controllerPath.split('/')[fieldPath];
+                    paths.push(path_temp);
+                }
+                temp.request.url.path = paths;
                 testFile.item.push(temp);
             }
             if (paths[path].post) {
@@ -415,13 +423,18 @@ exports.checkBackend = async (req,res) =>{
                                     ],
                                     "port": `${doc.host.split(':')[1]}`,
                                     "path": [
-                                        "api",
-                                        `${controllerName}`
+
                                     ]
                                 }
                             },
                             "response": []
                         }
+                        let paths = temp.request.url.path;
+                        for(let fieldPath = 1;fieldPath<controllerPath.split('/').length;fieldPath++) {
+                            const path_temp = controllerPath.split('/')[fieldPath];
+                            paths.push(path_temp);
+                        }
+                        temp.request.url.path = paths;
                         testFile.item.push(temp);
                     }
                 }else{
@@ -455,13 +468,17 @@ exports.checkBackend = async (req,res) =>{
                                 ],
                                 "port": `${doc.host.split(':')[1]}`,
                                 "path": [
-                                    "api",
-                                    `${controllerName}`
                                 ]
                             }
                         },
                         "response": []
                     }
+                    let paths = temp.request.url.path;
+                    for(let fieldPath = 1;fieldPath<controllerPath.split('/').length;fieldPath++) {
+                        const path_temp = controllerPath.split('/')[fieldPath];
+                        paths.push(path_temp);
+                    }
+                    temp.request.url.path = paths;
                     let data = "{"
                     for(let field in parameters.properties){
                         data += `"${field}": "1",`
@@ -473,15 +490,35 @@ exports.checkBackend = async (req,res) =>{
                 }
             }
         }
-        const jsonOutput = JSON.stringify(testFile, null, 2);
-        fs.writeFile('output.json', jsonOutput, (err) => {
-            if (err) {
-                console.error(err);
-                return;
+        let sortedHandlers = testFile.item.sort((a, b) => {
+            const nameA = a.name.toLowerCase();
+            const nameB = b.name.toLowerCase();
+
+            if (nameA.includes('add')) {
+                return -1;
+            } else if (nameB.includes('delete')) {
+                return -1;
+            } else if (nameA.includes('delete')) {
+                return 1;
+            } else {
+                return 0;
             }
         });
+        testFile.item = sortedHandlers;
+        const jsonOutput = JSON.stringify(testFile, null, 2);
+        // fs.writeFile('./output/output.json', jsonOutput, (err) => {
+        //     if (err) {
+        //         console.error(err);
+        //         return;
+        //     }
+        // });
+        res.writeHead(200, {
+            'Content-Type': 'application/json-my-attachment',
+            "content-disposition": "attachment; filename=\"output.json\""
+        });
+        res.end(jsonOutput);
     }
     catch (e){
-        console.log(e);
+        globalFunctions.sendError(res,e);
     }
 }
