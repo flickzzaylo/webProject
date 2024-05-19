@@ -146,6 +146,20 @@ exports.findByTeacherDisciplineIdAndTaskId = (req,res) =>{
         })
 }
 
+exports.findTasksToUsers = async(req,res) =>{
+    try{
+        const data = await db.sequelize.query(`select ut.task_id, ut.user_id, task.id, task.name, task.description from user_tasks ut
+        RIGHT JOIN task ON task.id=ut.task_id
+        where ut.user_id=${req.params.user_id} AND task.teacher_discipline_id=${req.params.teacher_discipline_id}`,
+            {
+                type: db.sequelize.QueryTypes.SELECT
+            })
+        globalFunctions.sendResult(res,data)
+    }catch (e){
+        globalFunctions.sendError(res,e);
+    }
+}
+
 // exports.findByTeacherDisciplineIdAndTaskIdAndUserId = (req,res) =>{
 //     db.sequelize.query(
 //         `SELECT * FROM teacher_discipline, task, user WHERE teacher_discipline.id=${req.params.teacher_discipline_id} AND task.id=${req.params.task_id} AND user.id=${req.params.user_id}`,

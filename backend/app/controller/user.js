@@ -118,9 +118,21 @@ exports.findRoleByUser = async (req,res)=>{
             type: db.sequelize.QueryTypes.SELECT
         }
     )
-        console.log(data);
+        // console.log(data);
         globalFunctions.sendResult(res,data);
     }catch(e){
+        globalFunctions.sendError(res,e);
+    }
+}
+
+exports.findIdByLogin = async(req,res)=>{
+    try{
+        const data = await db.sequelize.query(`select * from user where user.login='${req.params.login}'`,{
+            type: db.sequelize.QueryTypes.SELECT
+        })
+        console.log(data);
+        globalFunctions.sendResult(res,data);
+    }catch (e){
         globalFunctions.sendError(res,e);
     }
 }

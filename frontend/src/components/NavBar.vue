@@ -32,7 +32,7 @@
           </li>
         </ul>
       </div>
-      <div class="col-9">
+      <div class="col-9 content">
         <router-view></router-view>
       </div>
     </div>
@@ -70,17 +70,21 @@ export default {
 
 <style>
 .sidebar {
-  height: 100vh !important;
-  overflow-y: auto !important;
-  padding-top: 0 !important;
-  justify-content: space-between !important;
-  flex-direction: column !important;
+  height: 100vh;
+  overflow-y: auto;
+  padding-top: 0;
+  justify-content: space-between;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
 }
 
 .nav-link {
   font-family: 'cursive', sans-serif !important;
   font-size: 1.2rem !important;
-  color: lightgray !important; /* Розовый цвет */
+  color: lightgray !important;
   width: 100% !important;
   text-align: left !important;
 }
@@ -95,5 +99,8 @@ export default {
 .nav-link:hover {
   color: aquamarine !important; /* Голубой цвет */
   text-decoration: none !important;
+}
+.content {
+  margin-left: 20%; /* Отступ слева, равный ширине NavBar (2 колонки из 12 в Bootstrap) */
 }
 </style>

@@ -1,14 +1,17 @@
+const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('student_group', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      comment: "TRIAL"
     },
     name: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: false,
+      comment: "TRIAL"
     }
   });
 };

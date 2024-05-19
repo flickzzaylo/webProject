@@ -1,21 +1,22 @@
-var db = require('../config/db.config.js');
-var Teacher = db.teacher; // название модели смотреть в init-models.js
 var globalFunctions = require('../config/global.functions.js');
+var db = require('../config/db.config.js');
+var teacher = db.teacher; // название модели смотреть в init-models.js
+var teacherDiscipline = db.teacher_discipline;
 
 // Получение всех пользователей
 exports.findAll = (req, res) => {
-    Teacher.findAll()
-            .then(objects => {
-                // возврат найденных записей
-                globalFunctions.sendResult(res, objects);
-            }).catch(err => {
-                // возврат найденной ошибки
-                globalFunctions.sendError(res, err);
-            })
+    teacher.findAll()
+        .then(objects => {
+            globalFunctions.sendResult(res, objects);
+        })
+        .catch(err => {
+            globalFunctions.sendError(res, err);
+        })
 };
- 
+
+// Добавление пользователя
 exports.create = (req, res) => {
-    Teacher.create({
+    teacher.create({
         name: req.body.name
     }).then(object => {
         globalFunctions.sendResult(res, object);
@@ -23,9 +24,10 @@ exports.create = (req, res) => {
         globalFunctions.sendError(res, err);
     })
 };
- 
+
+// Обновление данных пользователя по id
 exports.update = (req, res) => {
-    Teacher.update({
+    teacher.update({
             name: req.body.name
         },
         {
@@ -39,10 +41,10 @@ exports.update = (req, res) => {
         globalFunctions.sendError(res, err);
     })
 };
- 
+
 // Удаление пользователя по id
 exports.delete = (req, res) => {
-    Teacher.destroy({
+    teacher.destroy({
         where: {
             id: req.params.id
         }
@@ -52,10 +54,10 @@ exports.delete = (req, res) => {
         globalFunctions.sendError(res, err);
     });
 };
- 
+
 // Получение данных пользователя по id
 exports.findById = (req, res) => {
-    Teacher.findByPk(req.params.id)
+    teacher.findByPk(req.params.id)
         .then(object => {
             globalFunctions.sendResult(res, object);
         })
@@ -64,22 +66,27 @@ exports.findById = (req, res) => {
         })
 };
 
-var TeacherDiscipline = db.teacher_discipline;
-
-exports.findAllDisciplines = (req, res) => {
-    TeacherDiscipline.findAll()
-                .then(object => {
-                    globalFunctions.sendResult(res, object);
-                })
-                .catch(err => {
-                    globalFunctions.sendError(res, err);
-                })
-}
+exports.showListDisciplines = (req,res)=>{
+    db.sequelize.query(
+        `SELECT teacher.name as teacher_name, discipline.name as discipline_name 
+        FROM teacher_discipline
+        INNER JOIN discipline ON discipline.id=teacher_discipline.discipline_id
+        INNER JOIN teacher ON teacher.id=teacher_discipline.teacher_id;`,
+        {
+            type: db.sequelize.QueryTypes.SELECT
+        })
+        .then(objects => {
+            globalFunctions.sendResult(res, objects);
+        })
+        .catch(err => {
+            globalFunctions.sendError(res, err);
+        })
+};
 
 exports.createDiscipline = (req, res) => {
-    TeacherDiscipline.create({
-        teacher_id: req.body.teacher_id, 
-        discipline_id: req.body.discipline_id 
+    teacherDiscipline.create({
+        teacher_id: req.body.teacher_id,
+        discipline_id: req.body.discipline_id
     }).then(object => {
         globalFunctions.sendResult(res, object);
     }).catch(err => {
@@ -87,16 +94,23 @@ exports.createDiscipline = (req, res) => {
     })
 };
 
-exports.deleteDiscipline = (req, res) => {
-    TeacherDiscipline.destroy({
+exports.deleteTeacherDiscipline = (req,res) => {
+    teacherDiscipline.destroy({
+        include: [
+            {
+                model: teacherDiscipline,
+                required: true
+            }
+        ],
         where: {
-            teacher_id: req.body.teacher_id,
-            discipline_id: req.body.discipline_id
+            teacher_id: req.params.teacher_id,
+            discipline_id: req.params.discipline_id
         }
-    }).then(() => {
-        globalFunctions.sendResult(res, 'Запись удалена');
-    }).catch(err => {
-        globalFunctions.sendError(res, err);
-    });
+    })
+    .then(objects => {
+        globalFunctions.sendResult(res,objects);
+    })
+    .catch(err => {
+        globalFunctions.sendError(res,err);
+    })
 };
- 

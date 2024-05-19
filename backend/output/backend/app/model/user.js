@@ -1,18 +1,22 @@
+const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('user', {
     id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      comment: "TRIAL"
     },
     username: {
-      type: DataTypes.STRING(50),
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: false,
+      comment: "TRIAL"
     },
     password: {
-      type: DataTypes.STRING(150),
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: false,
+      comment: "TRIAL"
     }
   });
 };

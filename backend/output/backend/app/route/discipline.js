@@ -1,10 +1,9 @@
-module.exports = (app) => { 
+module.exports = (app) => {
 
-    const discipline = require('../controller/discipline');
+    const discipline = require('../controller/discipline.js');
     
     // Получение всех пользователей
     app.get('/api/listDisciplines', discipline.findAll);
-
     // Добавление пользователя
     app.post('/api/addDiscipline', discipline.create);
 
@@ -16,5 +15,4 @@ module.exports = (app) => {
 
     // Получение пользователя по id
     app.get('/api/discipline/:id', discipline.findById);
-
-}
+};

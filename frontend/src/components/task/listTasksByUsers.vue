@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div v-if="this.role===3 || this.role===1" class="container-fluid">
     <div class="row">
       <div class="col-12">
         <h3 class="text-white mb-3" style="background-color: #007bff; padding: 10px;">Информация о задании</h3>
@@ -31,6 +31,7 @@
             <th scope="col">База данных</th>
             <th scope="col">Backend</th>
             <th scope="col">Отметка выполнено</th>
+            <th scope="col">Баллы</th>
             <th scope="col">Удалить</th>
             <th scope="col"><button class="btn btn-primary" v-on:click="showUserModal">Добавить студентов к заданию</button></th>
             <userModal v-show="isUserModalVisible" :id="this.id" @close="closeUserModal"/>
@@ -49,7 +50,7 @@
               </button>
             </td>
             <td>
-              <input type="file" :ref="'file_' + index" accept=".zip, .rar" v-on:change="uploadFile(task.id)">
+<!--              <input type="file" :ref="'file_' + index" accept=".zip, .rar" v-on:change="uploadFile(task.id)">-->
               <div v-if="task.file">
                 <a :href="this.globalVariables.serverUrl + task.file" download>
                   <button class="btn btn-sm btn-outline-primary">Скачать</button>
@@ -64,10 +65,12 @@
             <td>
               <span v-if="checkingTaskId===task.id" v-show="backendLoading" class="spinner-border spinner-border-sm"/>
               <button class="btn btn-sm btn-outline-primary" v-if="task.file" v-on:click="checkBackend(task.file, task.id)">Проверить</button>
-              <div v-if="sqlCheckMessage!=='' && checkingTaskId===task.id">{{sqlCheckMessage}}</div>
             </td>
             <td class="form-switch">
-              <input class="form-check-input" type="checkbox" :true-value="1" :false-value="0" v-model="task.isComplete" v-on:click="switchCheckbox(task.id)">
+              <input class="form-check-input" type="checkbox" :true-value="1" :false-value="0" v-model="task.isComplete" v-on:click="switchCheckbox(task.id,task.isComplete)">
+            </td>
+            <td>
+              <input class="form-control" type="text" name="name" id="name" placeholder="Баллы" required v-model="task.mark" v-on:input="setMark(task.id,task.mark)">
             </td>
             <td>
               <button class="btn btn-sm btn-outline-danger" v-on:click="deleteUser(task.id)">Удалить</button>
@@ -144,6 +147,7 @@ export default {
           })
     },
     async checkSql(file, task_id){
+      this.sqlCheckMessage = ""
       this.sqlLoading = true;
       this.checkingTaskId=task_id;
       const data = {
@@ -174,10 +178,36 @@ export default {
       }
       http.post('/checkBackend',data).then(obj=>{
         console.log(obj);
+        const fileContent = JSON.stringify(obj.data, null, 2);
+        const fileBlob = new Blob([fileContent], { type: 'application/json' });
+        const fileUrl = URL.createObjectURL(fileBlob);
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.download = 'output.json';
+        link.click();
+        URL.revokeObjectURL(fileUrl);
+        this.backendLoading = false;
       })
           .catch(e=>{
             console.log(e);
+            this.backendLoading = false;
           })
+    },
+    async setMark(id,mark){
+      try{
+        if(mark>100){
+          mark=100
+        }
+        if(mark<0){
+          mark=0
+        }
+        const data = {
+          mark: mark
+        }
+        await http.post(`/setMark/${id}`,data);
+      }catch (e){
+        console.log(e);
+      }
     },
     getTestCasesToTask(){
       http.get(`/testcasesByTask/${this.id}`)
@@ -246,8 +276,20 @@ export default {
             console.log(e);
           })
     },
-    async switchCheckbox(id){
+    async switchCheckbox(id,value){
       await http.post(`/switchComplete/${id}`);
+      if(value===1){
+        const data = {
+          mark: 0
+        }
+        await http.post(`/setMark/${id}`,data);
+      }
+      if(value===0){
+        const data = {
+          mark: 100
+        }
+        await http.post(`/setMark/${id}`,data)
+      }
       this.getUsersByTask();
     },
     async updateTask(e){

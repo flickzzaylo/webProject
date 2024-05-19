@@ -9,7 +9,12 @@
         <label for="name" class="text-dark">Логин:</label>
         <input type="text" placeholder="Логин" required v-model="user.login" class="form-control form-control-dark">
         <label for="name" class="text-dark">Пароль:</label>
+        <div class="d-flex">
         <input type="text" placeholder="Пароль" required v-model="user.password" class="form-control form-control-dark">
+          <button type="button" class="btn btn-dark ml-2" v-on:click="passGen()">
+            Сгенерировать
+          </button>
+        </div>
       </div>
         <div class="form-group">
         <label for="name" class="text-dark">Роль:</label>
@@ -66,6 +71,15 @@ export default {
       }catch (e){
         console.log(e);
       }
+    },
+    passGen(){
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let password = '';
+
+      for (let i = 0; i < 8; i++) {
+        password += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      this.user.password = password;
     }
   },
   mounted() {

@@ -83,7 +83,7 @@ import "@/components/styles/addStyle.css"
           var data = {
             teacher_discipline_id: this.task.teacher_discipline_id,
             prog_language_id: this.task.prog_language_id,
-            name: this.task.teacher_discipline_id,
+            name: this.task.name,
             description: this.task.description
           };
           await http.post("/addTask", data);

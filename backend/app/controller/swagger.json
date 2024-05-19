@@ -493,21 +493,6 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "teacher_id": {
-                  "example": "any"
-                },
-                "discipline_id": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {

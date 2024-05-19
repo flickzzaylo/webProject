@@ -4,7 +4,6 @@ module.exports = (app) => {
     
     // Получение всех пользователей
     app.get('/api/users', user.findAll);
-
     // Добавление пользователя
     app.post('/api/addUser', user.create);
 

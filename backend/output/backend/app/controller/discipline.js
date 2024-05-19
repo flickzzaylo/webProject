@@ -1,21 +1,21 @@
-var db = require('../config/db.config.js');
-var Discipline = db.discipline; // название модели смотреть в init-models.js
 var globalFunctions = require('../config/global.functions.js');
+var db = require('../config/db.config.js');
+var discipline = db.discipline; // название модели смотреть в init-models.js
 
 // Получение всех пользователей
 exports.findAll = (req, res) => {
-   Discipline.findAll()
+    discipline.findAll()
         .then(objects => {
-            // возврат найденных записей
             globalFunctions.sendResult(res, objects);
-        }).catch(err => {
-            // возврат найденной ошибки
+        })
+        .catch(err => {
             globalFunctions.sendError(res, err);
         })
 };
 
+// Добавление пользователя
 exports.create = (req, res) => {
-    Discipline.create({
+    discipline.create({
         name: req.body.name
     }).then(object => {
         globalFunctions.sendResult(res, object);
@@ -24,8 +24,9 @@ exports.create = (req, res) => {
     })
 };
 
+// Обновление данных пользователя по id
 exports.update = (req, res) => {
-    Discipline.update({
+    discipline.update({
             name: req.body.name
         },
         {
@@ -42,7 +43,7 @@ exports.update = (req, res) => {
 
 // Удаление пользователя по id
 exports.delete = (req, res) => {
-    Discipline.destroy({
+    discipline.destroy({
         where: {
             id: req.params.id
         }
@@ -55,7 +56,7 @@ exports.delete = (req, res) => {
 
 // Получение данных пользователя по id
 exports.findById = (req, res) => {
-    Discipline.findByPk(req.params.id)
+    discipline.findByPk(req.params.id)
         .then(object => {
             globalFunctions.sendResult(res, object);
         })

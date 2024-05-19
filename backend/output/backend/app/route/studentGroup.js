@@ -1,20 +1,21 @@
-module.exports = (app) => { 
+module.exports = (app) => {
 
-    const group = require('../controller/studentGroup');
+    const user = require('../controller/studentGroup');
     
     // Получение всех пользователей
-    app.get('/api/listStudentGroups', group.findAll);
-
+    app.get('/api/listStudentGroups', user.findAll);
     // Добавление пользователя
-    app.post('/api/addStudentGroup', group.create);
+    app.post('/api/addStudentGroup', user.create);
 
     // Обновление данных пользователя по id
-    app.post('/api/updateStudentGroup/:id', group.update);
+    app.post('/api/updateStudentGroup/:id', user.update);
 
     // Удаление данных пользователя по id
-    app.post('/api/deleteStudentGroup/:id', group.delete);
+    app.post('/api/deleteStudentGroup/:id', user.delete);
 
     // Получение пользователя по id
-    app.get('/api/studentGroup/:id', group.findById);
+    app.get('/api/studentGroup/:id', user.findById);
 
-}
+    // // Получение пользователя по username
+    // app.get('/api/group/:name', user.findByUsername);
+};

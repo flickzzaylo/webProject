@@ -13,4 +13,5 @@ module.exports = (app) =>{
     app.get('/api/taskByDiscipline/:id',[authJwt.verifyToken],task.findByTeacherDisciplineId);
     app.get('/api/task/teacherDId=:teacher_discipline_id/taskId=:task_id',[authJwt.verifyToken],task.findByTeacherDisciplineIdAndTaskId);
     // app.get('/api/task/teacherDId=:teacher_discipline_id/taskId=:task_id/userId=:user_id',task.findByTeacherDisciplineIdAndTaskIdAndUserId);
+    app.get('/api/tasks/userId=:user_id/teacherDisciplineId=:teacher_discipline_id',[authJwt.verifyToken],task.findTasksToUsers)
 }

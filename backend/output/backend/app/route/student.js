@@ -1,10 +1,9 @@
-module.exports = (app) => { 
+module.exports = (app) => {
 
-    const student = require('../controller/student');
+    const student = require('../controller/student.js');
     
-    // Получение всех пользователей
+    // // Получение всех пользователей
     app.get('/api/listStudents', student.findAll);
-
     // Добавление пользователя
     app.post('/api/addStudent', student.create);
 
@@ -17,6 +16,6 @@ module.exports = (app) => {
     // Получение пользователя по id
     app.get('/api/student/:id', student.findById);
 
-    app.get('/api/studentsByStudentGroup/studentGroupId=:student_group_id', student.studentsByStudentGroup);
-
-}
+    // Получение пользователя по username
+    app.get('/api/studentsByStudentGroup/studentGroupId=:student_group_id', student.fingByStudentGroupId);
+};

@@ -1,19 +1,19 @@
+var globalFunctions = require('../config/global.functions.js');
 var db = require('../config/db.config.js');
 var User = db.user; // название модели смотреть в init-models.js
-var globalFunctions = require('../config/global.functions.js');
 
 // Получение всех пользователей
 exports.findAll = (req, res) => {
-   User.findAll()
+    User.findAll()
         .then(objects => {
-            // возврат найденных записей
             globalFunctions.sendResult(res, objects);
-        }).catch(err => {
-            // возврат найденной ошибки
+        })
+        .catch(err => {
             globalFunctions.sendError(res, err);
         })
 };
 
+// Добавление пользователя
 exports.create = (req, res) => {
     User.create({
         username: req.body.username,
@@ -25,6 +25,7 @@ exports.create = (req, res) => {
     })
 };
 
+// Обновление данных пользователя по id
 exports.update = (req, res) => {
     User.update({
             username: req.body.username,
@@ -78,3 +79,21 @@ exports.findByUsername = (req, res) => {
         globalFunctions.sendError(res, err);
     })
 };
+
+// var user = {
+//     username: "dmitry",
+//     password: "test"
+// };
+
+// var user = 1;
+// fetch('http://localhost:3000/api/deleteUser/${user}',{
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json;charset=utf-8',
+//         },
+//     }).then((res) => {
+//         console.log(res)
+//     }).catch((err) => { 
+//         console.log(err)
+//     })
+

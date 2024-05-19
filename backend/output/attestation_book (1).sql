@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Ноя 11 2023 г., 17:07
--- Версия сервера: 10.4.28-MariaDB
--- Версия PHP: 8.2.4
+-- Время создания: Окт 30 2023 г., 04:36
+-- Версия сервера: 10.4.11-MariaDB
+-- Версия PHP: 7.4.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,12 +28,13 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `attestation_book` (
-  `id` int(11) NOT NULL,
-  `student_id` int(11) DEFAULT NULL,
-  `student_group_session_id` int(11) DEFAULT NULL,
-  `mark` int(11) DEFAULT NULL,
-  `theme` varchar(150) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int(11) NOT NULL COMMENT 'TRIAL',
+  `student_id` int(11) DEFAULT NULL COMMENT 'TRIAL',
+  `student_group_session_id` int(11) DEFAULT NULL COMMENT 'TRIAL',
+  `mark` int(11) DEFAULT NULL COMMENT 'TRIAL',
+  `theme` text DEFAULT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -42,9 +43,10 @@ CREATE TABLE `attestation_book` (
 --
 
 CREATE TABLE `discipline` (
-  `id` int(11) NOT NULL,
-  `name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int(11) NOT NULL COMMENT 'TRIAL',
+  `name` text NOT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -53,9 +55,23 @@ CREATE TABLE `discipline` (
 --
 
 CREATE TABLE `report_type` (
+  `id` int(11) NOT NULL COMMENT 'TRIAL',
+  `name` text NOT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `sqlite_sequence`
+--
+
+CREATE TABLE `sqlite_sequence` (
   `id` int(11) NOT NULL,
-  `name` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `name` text DEFAULT NULL COMMENT 'TRIAL',
+  `seq` text DEFAULT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -64,10 +80,11 @@ CREATE TABLE `report_type` (
 --
 
 CREATE TABLE `student` (
-  `id` int(11) NOT NULL,
-  `name` varchar(150) NOT NULL,
-  `student_group_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int(11) NOT NULL COMMENT 'TRIAL',
+  `name` text NOT NULL COMMENT 'TRIAL',
+  `student_group_id` int(11) DEFAULT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -76,9 +93,10 @@ CREATE TABLE `student` (
 --
 
 CREATE TABLE `student_group` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int(11) NOT NULL COMMENT 'TRIAL',
+  `name` text NOT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -87,13 +105,14 @@ CREATE TABLE `student_group` (
 --
 
 CREATE TABLE `student_group_session` (
-  `id` int(11) NOT NULL,
-  `student_group_id` int(11) DEFAULT NULL,
-  `report_type_id` int(11) DEFAULT NULL,
-  `teacher_discipline_id` int(11) DEFAULT NULL,
-  `mark_date` varchar(20) DEFAULT NULL,
-  `semester` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int(11) NOT NULL COMMENT 'TRIAL',
+  `student_group_id` int(11) DEFAULT NULL COMMENT 'TRIAL',
+  `report_type_id` int(11) DEFAULT NULL COMMENT 'TRIAL',
+  `teacher_discipline_id` int(11) DEFAULT NULL COMMENT 'TRIAL',
+  `mark_date` text DEFAULT NULL COMMENT 'TRIAL',
+  `semester` int(11) NOT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -102,9 +121,10 @@ CREATE TABLE `student_group_session` (
 --
 
 CREATE TABLE `teacher` (
-  `id` int(11) NOT NULL,
-  `name` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int(11) NOT NULL COMMENT 'TRIAL',
+  `name` int(11) NOT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -113,10 +133,11 @@ CREATE TABLE `teacher` (
 --
 
 CREATE TABLE `teacher_discipline` (
-  `id` int(11) NOT NULL,
-  `teacher_id` int(11) DEFAULT NULL,
-  `discipline_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+  `id` int(11) NOT NULL COMMENT 'TRIAL',
+  `teacher_id` int(11) DEFAULT NULL COMMENT 'TRIAL',
+  `discipline_id` int(11) DEFAULT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -125,19 +146,11 @@ CREATE TABLE `teacher_discipline` (
 --
 
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(150) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
---
--- Дамп данных таблицы `user`
---
-
-INSERT INTO `user` (`id`, `username`, `password`) VALUES
-(2, 'cat777', '159753'),
-(3, 'ivanov_v', '333333'),
-(4, 'turenko2003', '123456');
+  `id` int(11) NOT NULL COMMENT 'TRIAL',
+  `username` text NOT NULL COMMENT 'TRIAL',
+  `password` text NOT NULL COMMENT 'TRIAL',
+  `trial708` char(1) DEFAULT NULL COMMENT 'TRIAL'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Индексы сохранённых таблиц
@@ -148,8 +161,8 @@ INSERT INTO `user` (`id`, `username`, `password`) VALUES
 --
 ALTER TABLE `attestation_book`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `student_id` (`student_id`),
-  ADD KEY `student_group_session_id` (`student_group_session_id`);
+  ADD KEY `fk__student_0` (`student_id`) USING BTREE,
+  ADD KEY `fk__student_group_session_1` (`student_group_session_id`) USING BTREE;
 
 --
 -- Индексы таблицы `discipline`
@@ -164,11 +177,17 @@ ALTER TABLE `report_type`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `sqlite_sequence`
+--
+ALTER TABLE `sqlite_sequence`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Индексы таблицы `student`
 --
 ALTER TABLE `student`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `student_group_id` (`student_group_id`);
+  ADD KEY `fk_sqlite_sequence_student_group_0` (`student_group_id`) USING BTREE;
 
 --
 -- Индексы таблицы `student_group`
@@ -181,9 +200,9 @@ ALTER TABLE `student_group`
 --
 ALTER TABLE `student_group_session`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `student_group_id` (`student_group_id`),
-  ADD KEY `report_type_id` (`report_type_id`),
-  ADD KEY `teacher_discipline_id` (`teacher_discipline_id`);
+  ADD KEY `fk_student_group_report_type_0` (`report_type_id`) USING BTREE,
+  ADD KEY `fk_student_group_student_group_1` (`student_group_id`) USING BTREE,
+  ADD KEY `fk_student_group_teacher_discipline_2` (`teacher_discipline_id`) USING BTREE;
 
 --
 -- Индексы таблицы `teacher`
@@ -196,8 +215,8 @@ ALTER TABLE `teacher`
 --
 ALTER TABLE `teacher_discipline`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `teacher_id` (`teacher_id`),
-  ADD KEY `discipline_id` (`discipline_id`);
+  ADD KEY `fk_teacher_discipline_0` (`discipline_id`) USING BTREE,
+  ADD KEY `fk_teacher_teacher_1` (`teacher_id`) USING BTREE;
 
 --
 -- Индексы таблицы `user`
@@ -213,55 +232,61 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT для таблицы `attestation_book`
 --
 ALTER TABLE `attestation_book`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'TRIAL';
 
 --
 -- AUTO_INCREMENT для таблицы `discipline`
 --
 ALTER TABLE `discipline`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'TRIAL';
 
 --
 -- AUTO_INCREMENT для таблицы `report_type`
 --
 ALTER TABLE `report_type`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'TRIAL';
+
+--
+-- AUTO_INCREMENT для таблицы `sqlite_sequence`
+--
+ALTER TABLE `sqlite_sequence`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `student`
 --
 ALTER TABLE `student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'TRIAL';
 
 --
 -- AUTO_INCREMENT для таблицы `student_group`
 --
 ALTER TABLE `student_group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'TRIAL';
 
 --
 -- AUTO_INCREMENT для таблицы `student_group_session`
 --
 ALTER TABLE `student_group_session`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'TRIAL';
 
 --
 -- AUTO_INCREMENT для таблицы `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'TRIAL';
 
 --
 -- AUTO_INCREMENT для таблицы `teacher_discipline`
 --
 ALTER TABLE `teacher_discipline`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'TRIAL';
 
 --
 -- AUTO_INCREMENT для таблицы `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'TRIAL';
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

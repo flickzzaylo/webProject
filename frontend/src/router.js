@@ -24,6 +24,7 @@ import addUser from "./components/user/addUser.vue";
 import addTask from "./components/task/addTask.vue";
 import commentModal from "./components/task/commentModal.vue";
 import login from "./components/authorization/Login.vue";
+import taskForStudent from "./components/task/listTasksForStudents.vue"
 
 const routes = [
     {
@@ -226,7 +227,16 @@ const routes = [
         meta:{
             title: "Вход"
         }
-    }
+    },
+    {
+        path: "/taskForStudent/:id",
+        name: "taskForStudents",
+        props: true,
+        component: taskForStudent,
+        meta:{
+            title: "Задача"
+        }
+    },
 ];
 const router = createRouter({
     history: createWebHistory(),
@@ -235,7 +245,7 @@ const router = createRouter({
 
 
 router.beforeEach(async (to, from, next) => {
-    document.title = to.meta.title || 'Комлятор онлайн';
+    document.title = to.meta.title || 'Вход в систему';
     const auth = await store.getters["auth/isTokenActive"];
     if (auth) {
         return next();

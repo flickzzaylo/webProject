@@ -5,23 +5,36 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      comment: "TRIAL"
     },
     student_id: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      comment: "TRIAL",
+      references: {
+        model: 'student',
+        key: 'id'
+      }
     },
     student_group_session_id: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      comment: "TRIAL",
+      references: {
+        model: 'student_group_session',
+        key: 'id'
+      }
     },
     mark: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
+      comment: "TRIAL"
     },
     theme: {
-      type: DataTypes.STRING(150),
-      allowNull: true
+      type: DataTypes.TEXT,
+      allowNull: true,
+      comment: "TRIAL"
     }
   });
 };

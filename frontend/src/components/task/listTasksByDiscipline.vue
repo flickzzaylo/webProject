@@ -1,10 +1,10 @@
 <template>
-  <div v-if="this.role===3 || this.role===1" class="container">
+  <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="text-center">
           <h3 class="text-white mb-3" style="background-color: #007bff; padding: 10px;">Выбор задания</h3>
-  <ul class="list-group">
+  <ul v-if="this.role===1 || this.role===3" class="list-group">
     <li class="list-group-item" v-for="(taskByDisc,index) in tasksByDiscipline" :key="index">
       <router-link :to="{
       name:'tasksByUsers',
@@ -12,25 +12,24 @@
       query: {teacherDId: this.teacher_discipline_id}
       }" class="nav-link text-dark">
         <span style="font-family: Arial, sans-serif; font-size: 18px; text-decoration: none;">
-          {{taskByDisc.name}} {{taskByDisc.description}}
+          {{taskByDisc.name}}
         </span>
       </router-link>
     </li>
   </ul>
-
-<!--  <div v-if="this.role===2">-->
-<!--    <ul>-->
-<!--    <li v-for="(taskByDisc,index) in tasksByDiscipline" :key="index">-->
-<!--&lt;!&ndash;      <router-link :to="{&ndash;&gt;-->
-<!--&lt;!&ndash;      name:'tasksByUsers',&ndash;&gt;-->
-<!--&lt;!&ndash;      params: {id: taskByDisc.id},&ndash;&gt;-->
-<!--&lt;!&ndash;      query: {teacherDId: this.teacher_discipline_id}&ndash;&gt;-->
-<!--&lt;!&ndash;      }">&ndash;&gt;-->
-<!--        {{taskByDisc.name}} {{taskByDisc.description}}-->
-<!--&lt;!&ndash;      </router-link>&ndash;&gt;-->
-<!--    </li>-->
-<!--    </ul>-->
-<!--  </div>-->
+          <ul v-if="this.role===2" class="list-group">
+            <li class="list-group-item" v-for="(taskByDisc,index) in taskByDisciplineToUsers" :key="index">
+              <router-link :to="{
+      name:'taskForStudents',
+      params: {id: taskByDisc.id},
+      query: {teacherDId: this.teacher_discipline_id}
+      }" class="nav-link text-dark">
+        <span style="font-family: Arial, sans-serif; font-size: 18px; text-decoration: none;">
+          {{taskByDisc.name}}
+        </span>
+              </router-link>
+            </li>
+          </ul>
 
   <div v-if="this.role===3 || this.role===1"><router-link class="btn btn-primary btn-block mt-3" to="/addTask">Добавить задание</router-link></div>
         </div>
@@ -51,7 +50,8 @@ export default {
   data(){
     return{
       tasksByDiscipline: [],
-      teacher_discipline_id: this.id
+      teacher_discipline_id: this.id,
+      taskByDisciplineToUsers: []
     }
   },
   methods: {
@@ -66,11 +66,23 @@ export default {
             .catch(e=>{
               console.log(e);
             })
+    },
+    async getTaskByUsers(){
+      try{
+        const login = this.$store.state.auth.user.login;
+        let response = await http.get(`/idByUser/${login}`);
+        const user_id = response.data[0].id;
+        const response_2 = await http.get(`/tasks/userId=${user_id}/teacherDisciplineId=${this.id}`)
+        this.taskByDisciplineToUsers = response_2.data
+      }catch (e){
+        console.log(e);
+      }
     }
   },
   mounted() {
     this.currentUserRole();
     this.getTasksByDiscipline();
+    this.getTaskByUsers();
   }
 }
 </script>

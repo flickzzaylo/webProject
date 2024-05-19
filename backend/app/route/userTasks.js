@@ -22,4 +22,8 @@ module.exports = (app) =>{
     app.post('/api/checkSql',[authJwt.verifyToken],userTasks.findSql);
 
     app.post('/api/checkBackend',[authJwt.verifyToken],userTasks.checkBackend);
+
+    app.post('/api/setMark/:id',[authJwt.verifyToken],userTasks.setMark);
+
+    app.get('/api/getTask/userId=:user_id/taskId=:task_id',[authJwt.verifyToken],userTasks.findUserTaskByTaskIdAndUserId);
 }

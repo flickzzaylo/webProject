@@ -52,7 +52,6 @@ exports.deleteTask = (req,res) =>{
                 globalFunctions.sendError(res,err);
             })
 }
-
 exports.switchComplete = async (req,res) =>{
     try {
         const data = await db.sequelize.query(`UPDATE user_tasks SET isComplete=!isComplete WHERE id = ${req.params.id}`,
@@ -60,6 +59,16 @@ exports.switchComplete = async (req,res) =>{
                 type: db.sequelize.QueryTypes.UPDATE
             })
         globalFunctions.sendResult(res, data);
+    }catch (e){
+        globalFunctions.sendError(res,e);
+    }
+}
+exports.setMark = async (req,res) =>{
+    try{
+        const data = await db.sequelize.query(`UPDATE user_tasks SET mark=${req.body.mark} WHERE id=${req.params.id}`,{
+            type: db.sequelize.QueryTypes.UPDATE
+        })
+        globalFunctions.sendResult(res,data);
     }catch (e){
         globalFunctions.sendError(res,e);
     }
@@ -122,6 +131,19 @@ exports.findUsersInTask = async (req,res) =>{
             })
         globalFunctions.sendResult(res, data);
     }catch(e){
+        globalFunctions.sendError(res,e);
+    }
+}
+
+exports.findUserTaskByTaskIdAndUserId = async(req,res) =>{
+    try{
+        const data = await db.sequelize.query(`SELECT * FROM user_tasks ut WHERE ut.task_id=${req.params.task_id} AND ut.user_id=${req.params.user_id}`,
+            {
+                type: db.sequelize.QueryTypes.SELECT
+            })
+        globalFunctions.sendResult(res,data);
+    }
+    catch (e){
         globalFunctions.sendError(res,e);
     }
 }
@@ -238,31 +260,14 @@ exports.findSql = (req,res) =>{
     }
 }
 
-
 exports.checkBackend = async (req,res) =>{
     try {
         const pathToUnzip = path.resolve('./output')
         const archive = path.resolve("./files", `${req.body.fileName}`)
         const zip = new AdmZip(archive);
-        const backendEntry = zip.getEntry("backend/");
-        let projectInFolder, baseFolder;
-        if (backendEntry) {
-            projectInFolder = false
-        } else {
-            const entries = zip.getEntries();
-            baseFolder = entries[0].entryName.split('/')[0];
-            projectInFolder = true;
-        }
         zip.extractAllToAsync(pathToUnzip, true);
         const outputFile = './app/controller/swagger.json';
-        let endpointsFiles;
-        if(projectInFolder){
-            // endpointsFiles = [`./output/${baseFolder}/backend/app/route/*.js`];
-            endpointsFiles = [`./output/backend/app/route/*.js`];
-        }else{
-            endpointsFiles = [`./output/backend/app/route/*.js`];
-        }
-        console.log(endpointsFiles);
+        const endpointsFiles = [`./output/backend/app/route/*.js`];
         const doc = {
             info: {
                 title: 'Tasks',
@@ -506,17 +511,7 @@ exports.checkBackend = async (req,res) =>{
         });
         testFile.item = sortedHandlers;
         const jsonOutput = JSON.stringify(testFile, null, 2);
-        // fs.writeFile('./output/output.json', jsonOutput, (err) => {
-        //     if (err) {
-        //         console.error(err);
-        //         return;
-        //     }
-        // });
-        res.writeHead(200, {
-            'Content-Type': 'application/json-my-attachment',
-            "content-disposition": "attachment; filename=\"output.json\""
-        });
-        res.end(jsonOutput);
+        globalFunctions.sendResult(res,jsonOutput);
     }
     catch (e){
         globalFunctions.sendError(res,e);
