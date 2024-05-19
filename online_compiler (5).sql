@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Май 17 2024 г., 03:58
+-- Время создания: Май 19 2024 г., 09:58
 -- Версия сервера: 10.4.32-MariaDB
 -- Версия PHP: 8.2.12
 
@@ -38,7 +38,7 @@ CREATE TABLE `discipline` (
 
 INSERT INTO `discipline` (`id`, `name`) VALUES
 (1, 'Разработка веб-приложений'),
-(2, 'Языки программирования');
+(6, 'Языки программирования');
 
 -- --------------------------------------------------------
 
@@ -59,7 +59,8 @@ INSERT INTO `prog_language` (`id`, `name`) VALUES
 (1, 'C++'),
 (2, 'Java'),
 (3, 'C#'),
-(4, 'Vue.js');
+(4, 'Vue.js'),
+(6, 'Node.js');
 
 -- --------------------------------------------------------
 
@@ -100,9 +101,9 @@ CREATE TABLE `task` (
 --
 
 INSERT INTO `task` (`id`, `teacher_discipline_id`, `prog_language_id`, `name`, `description`) VALUES
-(2, 1, 1, 'Задание №1', 'Написать программу для суммирования двух чисел на C++'),
-(3, 2, 4, 'Задание №1', 'Сделать переход между ссылками в AttestationBook'),
-(4, 1, 2, 'Задание №1', 'Написать код на Java');
+(14, 4, 6, 'Определение обработчиков маршрутов', 'В рамках данной работы требуется реализовать обработчики маршрутов, которые на запрос по некоторому адресу будут возвращать данные (или наборы данных).'),
+(15, 4, 6, 'Работа с зачётной книжкой', 'В данной работе необходимо реализовать:\n1) Назначение преподавателям учебных дисциплин, которые они ведут;\n2) Формирование записей о сессии с указанием семестра;\n3) Ввод и просмотр оценок студента.'),
+(26, 5, 1, 'Задание', 'Описание');
 
 -- --------------------------------------------------------
 
@@ -121,8 +122,8 @@ CREATE TABLE `teacher` (
 --
 
 INSERT INTO `teacher` (`id`, `user_id`, `name`) VALUES
-(1, 3, 'Кириченко Константин Дмитриевич'),
-(2, 6, 'Попова Виктория Алексеевна');
+(5, 26, 'Попова Виктория Алексеевна'),
+(6, 28, 'Кириченко Константин Дмитриевич');
 
 -- --------------------------------------------------------
 
@@ -141,8 +142,8 @@ CREATE TABLE `teacher_discipline` (
 --
 
 INSERT INTO `teacher_discipline` (`id`, `teacher_id`, `discipline_id`) VALUES
-(1, 1, 2),
-(2, 2, 1);
+(4, 5, 1),
+(5, 6, 6);
 
 -- --------------------------------------------------------
 
@@ -162,8 +163,9 @@ CREATE TABLE `testcase` (
 --
 
 INSERT INTO `testcase` (`id`, `task_id`, `input`, `output`) VALUES
-(14, 2, 'select * from student', ''),
-(15, 2, 'select * from discipline', '');
+(20, 14, 'SELECT * FROM attestation_book', ''),
+(23, 14, 'SELECT * FROM discipline', ''),
+(24, 14, 'SELECT * FROM user', '');
 
 -- --------------------------------------------------------
 
@@ -183,19 +185,17 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `role_id`, `login`, `password`) VALUES
-(3, 1, 'Kirichenko', 'kirich123'),
-(4, 2, 'Zabrodin', 'zooru123'),
-(5, 2, 'Siviy', 'sivsiv'),
-(6, 1, 'victoriapopovainst', 'password'),
-(7, 2, 'KirillOkunev', 'ilovefish'),
-(8, 1, 'RyabecLV', 'asdasdasd'),
-(10, 2, 'IvanIvanov', 'vanovanovano'),
-(11, 2, 'AndreevAndrey', 'strongpassword'),
-(12, 2, 'test1', 'test1'),
-(13, 2, 'test2', 'test2'),
 (14, 3, 'admin', '$2a$10$.vfRiN6LTueeRm4VAWLAFO.l93R3ioFZHIObFFFEIdL.ICwIfuc5W'),
-(15, 3, 'superuser', '$2a$10$rS6fh7ydsxrmlxdx1LDTKebJvUJS9Yq.EODsfN1EOJdnDgG60XGGK'),
-(16, 2, 'user', '$2a$10$FYZScGH.Y9NycLgJFnP2a.qglPifImE3Fb9qL5hNMrIi4ysM8lYKa');
+(19, 2, 'ZabrodinVadim', '$2a$10$irkC/bYRx/k8oKogtBAjXeZWwUWHlxAJwZJ/ZQv2kj7G8NqBTuOrq'),
+(20, 2, 'SiviyDmitry', '$2a$10$s8zsG2mGpg.WY.atYaoZP.lQAaxgKncdz0JuL1rTmjlgW2f0NYeQK'),
+(21, 2, 'OkunevKirill', '$2a$10$ekCawzfsmFst47qX5M6XWOC68DDkd2jZBl0L3978Lh.0WwZGmvtTa'),
+(22, 2, 'IvanovIvan', '$2a$10$wL5X6ncTO59ulM2G61q0HeQ6p4MUX.ayZ0BsQoOvyv0VT0bk.7tsW'),
+(23, 2, 'AbramovVadim', '$2a$10$cYfI58EPzOCN0fkSV2/Tz.212Y7EauK0yWKlYwhsimbJNqFd4mL7q'),
+(24, 2, 'LebedevArtem', '$2a$10$/SdjVUD0n.azo4p2k0nQZOoe0.Nj/m26GfSehoVoeurpJoXYJnorq'),
+(25, 2, 'PetrovIvan', '$2a$10$V3DHbGsSTYJawBXyEe6Pj.PAcJSG/A0C82MG.KG2Jnqz7V4QSNPBS'),
+(26, 1, 'PopovaVictoria', '$2a$10$.buBgGyQC8LtVeikqNafJeEOmdlurzbrucYkXHU05OKYcnb9eXDSC'),
+(27, 2, 'user', '$2a$10$TryKjWMXyvf9Vw8ARDHtGOcQ3z433CtSlyM01S/LFqFkx7.wcFVXm'),
+(28, 1, 'KirichenkoK', '$2a$10$Z/.7rt4KA/Y0aryG37WvJ.g4nHnKTp66msgCVPdtP3P7zBOCuGzl.');
 
 -- --------------------------------------------------------
 
@@ -219,12 +219,11 @@ CREATE TABLE `user_tasks` (
 --
 
 INSERT INTO `user_tasks` (`id`, `task_id`, `user_id`, `mark`, `comment`, `file`, `mime_type`, `isComplete`) VALUES
-(1, 2, 7, NULL, 'Sasdasd', 'c7e86832-8e11-4407-b7d1-1c73ff515d09.x-zip-compressed', 'application/x-zip-compressed', 1),
-(3, 2, 4, NULL, 'куккк', '', '', 0),
-(23, 4, 4, NULL, 'фывфыв', NULL, '', 0),
-(24, 4, 5, NULL, '', NULL, '', 0),
-(33, 2, 5, NULL, '', NULL, '', 0),
-(34, 2, 10, NULL, '', NULL, '', 0);
+(37, 14, 19, 80, 'Доделать ??', '10deb2de-ff51-44e4-a032-cecb7bd72d8a.x-zip-compressed', 'application/x-zip-compressed', 1),
+(38, 14, 20, NULL, '', '2741e734-aca6-4869-bddf-332e3dbb7b40.x-zip-compressed', 'application/x-zip-compressed', 0),
+(39, 14, 21, NULL, '', '554dae18-dcfc-43b5-8721-4f4aeaec8783.x-zip-compressed', 'application/x-zip-compressed', 0),
+(48, 15, 23, NULL, '', NULL, '', 0),
+(49, 15, 22, NULL, '', NULL, '', 0);
 
 --
 -- Индексы сохранённых таблиц
@@ -301,13 +300,13 @@ ALTER TABLE `user_tasks`
 -- AUTO_INCREMENT для таблицы `discipline`
 --
 ALTER TABLE `discipline`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `prog_language`
 --
 ALTER TABLE `prog_language`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `role`
@@ -319,37 +318,37 @@ ALTER TABLE `role`
 -- AUTO_INCREMENT для таблицы `task`
 --
 ALTER TABLE `task`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT для таблицы `teacher`
 --
 ALTER TABLE `teacher`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `teacher_discipline`
 --
 ALTER TABLE `teacher_discipline`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `testcase`
 --
 ALTER TABLE `testcase`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT для таблицы `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT для таблицы `user_tasks`
 --
 ALTER TABLE `user_tasks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
