@@ -56,6 +56,12 @@ var db = init_models.initModels(sequelize);
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+Object.keys(db).forEach(key => {
+    if (db[key] && db[key].associate) {
+        db[key].associate(db);
+    }
+});
+
 // db.role.create({
 //     name: 'Виталя'
 // }).then(newReport=>{

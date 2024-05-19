@@ -1,37 +1,46 @@
 <template>
-    <div v-if="teacher">
-        <h4>Данные преподавателей</h4>
-        <form @submit="updateTeacher">
-            <div>
-                <input type="text" name="name" id="name" placeholder="ФИО" required v-model="teacher.name">
+    <div v-if="teacher && this.role===3" class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="text-center">
+            <h3 class="text-white mb-3" style="background-color: #007bff; padding: 10px;">Данные преподавателей</h3>
+        <form @submit="updateTeacher" class="text-left">
+            <div class="form-group">
+              <label for="name" class="text-dark">Фамилия Имя Отчество:</label>
+                <input class="form-control" type="text" name="name" id="name" placeholder="ФИО" required v-model="teacher.name">
             </div>
-            <div>
-                <select class="form-select" required v-model="teacher.user_id">
+            <div class="form-group">
+              <label for="name" class="text-dark">Выберите логин преподавателя:</label>
+                <select class="form-select form-control-dark" required v-model="teacher.user_id">
                     <option value="" disabled selected>Выберите пользователя</option>
                     <option v-for="user in users" v-bind:key="user.id" v-bind:value="user.id">
                         {{user.login}}
                     </option>
                 </select>
             </div>
-            <div>
-                <input type="submit" value="Обновить">
+          <div class="row mt-3">
+            <div class="col">
+              <button type="submit" value="Обновить" class="btn btn-primary btn-block">Обновить</button>
             </div>
-            <div>
-                <button v-on:click="deleteTeacher()">Удалить</button>
+            <div class="col">
+                <button v-on:click="deleteTeacher()" class="btn btn-danger btn-block">Удалить</button>
             </div>
+          </div>
         </form>
-    </div>
-    <div v-else>
-        <br>
-        <p>Выберите студента</p>
+          </div>
+        </div>
+      </div>
     </div>
 </template>
 
 <script>
     import http from "../../http-common";
+    import {userRole} from "@/mixins/currentUser";
+    import '@/components/styles/dataStyle.css'
     export default {
         name: "teacher-details",
         props: ['id'],
+      mixins: [userRole],
         data() {
             return {
                 teacher: null,
@@ -51,7 +60,7 @@
             },
             getUsers() {
                 http
-                    .get("/listUsers")
+                    .get("/listTeachersHasNotUser")
                     .then(response => {
                         this.users = response.data;
                     })
@@ -86,6 +95,7 @@
             }
         },
         mounted() {
+          this.currentUserRole();
             this.getTeacher();
             this.getUsers();
         }

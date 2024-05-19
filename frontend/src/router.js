@@ -1,4 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
+import store from "./store/index";
 import compiler from "./components/compiler/compiler"
 import listDisciplines from "./components/discipline/listDisciplines"
 import discipline from "./components/discipline/Discipline"
@@ -19,6 +20,11 @@ import addTeacherDiscipline from "./components/teacherDiscipline/addTeacherDisci
 import listTasksByDiscipline from "./components/task/listTDiscipline.vue"
 import listTasksByDisciplineAndTask from "./components/task/listTasksByDiscipline.vue"
 import listTasksByUsers from "./components/task/listTasksByUsers.vue";
+import addUser from "./components/user/addUser.vue";
+import addTask from "./components/task/addTask.vue";
+import commentModal from "./components/task/commentModal.vue";
+import login from "./components/authorization/Login.vue";
+import taskForStudent from "./components/task/listTasksForStudents.vue"
 
 const routes = [
     {
@@ -180,14 +186,57 @@ const routes = [
         }
     },
     {
-        path: "/listTasksByUser/teacher_discipline=:teacherDId/task_id=:id",
+        path: "/tasksByUserId/:id",
         name: "tasksByUsers",
         props: true,
         component: listTasksByUsers,
         meta:{
             title: "Список задач"
         }
-    }
+    },
+    {
+        path: "/addUser",
+        name: "addUser",
+        component: addUser,
+        meta:{
+            title: "Добавление пользователя"
+        }
+    },
+    {
+        path: "/addTask",
+        name: "addTask",
+        component: addTask,
+        meta: {
+            title: "Добавления задания"
+        }
+    },
+    {
+        path:"/commentModal",
+        name: "comment-modal",
+        component: commentModal,
+        props: true,
+        meta:{
+            title: "Редактирование комментария",
+            requiredAuth: true
+        }
+    },
+    {
+        path:"/login",
+        name: "LoginUser",
+        component: login,
+        meta:{
+            title: "Вход"
+        }
+    },
+    {
+        path: "/taskForStudent/:id",
+        name: "taskForStudents",
+        props: true,
+        component: taskForStudent,
+        meta:{
+            title: "Задача"
+        }
+    },
 ];
 const router = createRouter({
     history: createWebHistory(),
@@ -195,9 +244,24 @@ const router = createRouter({
 });
 
 
-router.beforeEach((to, from, next) => {
-    document.title = to.meta.title || 'Комлятор онлайн';
-    next();
+router.beforeEach(async (to, from, next) => {
+    document.title = to.meta.title || 'Вход в систему';
+    const auth = await store.getters["auth/isTokenActive"];
+    if (auth) {
+        return next();
+    }
+    else if (!auth && to.meta.requiredAuth) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        await store.dispatch("auth/refreshToken", user)
+            .then(() => {
+                return next();
+            })
+            .catch(() => {
+                return next({path: "/login"});
+            });
+        return next({ path: "/login" });
+    }
+    return next();
 });
 
 export default router;

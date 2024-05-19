@@ -1,5 +1,7 @@
 var express = require('express');
 var app = express();
+// const swaggerUi = require('swagger-ui-express');
+// const swaggerDocument = require('./app/controller/swagger.json');
 var bodyParser = require('body-parser');
 var db = require('./app/config/db.config.js');
 app.use(bodyParser.json());
@@ -12,6 +14,8 @@ var corsOptions = {
 };
 app.use(cors(corsOptions));
 db.sequelize.sync({force: false});
+app.use(express.static("files"));
+// app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 /////
 var compiler = require('./app/route/compiler.js');
 compiler(app);
@@ -29,4 +33,24 @@ var teacherDiscipline = require('./app/route/teacherDiscipline.js');
 teacherDiscipline(app);
 var task = require('./app/route/task.js');
 task(app);
+var userTasks = require('./app/route/userTasks');
+userTasks(app);
+var auth = require('./app/route/auth.js');
+auth(app);
+var testcase = require('./app/route/testcase');
+testcase(app);
 app.listen(2000);
+
+var route, routes = [];
+
+app._router.stack.forEach(function(middleware){
+    if(middleware.route){ // routes registered directly on the app
+        routes.push(middleware.route);
+    } else if(middleware.name === 'router'){ // router middleware
+        middleware.handle.stack.forEach(function(handler){
+            route = handler.route;
+            route && routes.push(route);
+        });
+    }
+});
+// console.log(routes)

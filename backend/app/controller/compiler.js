@@ -31,21 +31,21 @@ const axios = require('axios');
 //   //     'bash'
 //   //   ],
 //   //   lang: 'java',
-    // code: `import java.util.Scanner;
+// code: `import java.util.Scanner;
 
-    // public class Main {
-    //     public static void main(String[] args) {
-    //         String str = "";
-    //         Scanner scan = new Scanner(System.in);
-    //         str = scan.nextLine();
-    //         int a = scan.nextInt();
-    //         if(str.contains("f") && a==0){
-    //             System.out.println("yes");
-    //         }else{
-    //             System.out.println("no");
-    //         }
-    //     }
-    // }`,
+// public class Main {
+//     public static void main(String[] args) {
+//         String str = "";
+//         Scanner scan = new Scanner(System.in);
+//         str = scan.nextLine();
+//         int a = scan.nextInt();
+//         if(str.contains("f") && a==0){
+//             System.out.println("yes");
+//         }else{
+//             System.out.println("no");
+//         }
+//     }
+// }`,
 //   //   input: 'asdf\n0',
 //   // }
 // };
@@ -53,11 +53,9 @@ const axios = require('axios');
 exports.code = async (req, res) => {
     try {
         const response = await axios.request(req.body);
-        console.log(response.data);
         globalFunctions.sendResult(res, response.data);
 
     } catch (error) {
-        console.log("Error");
         console.error(error);
         globalFunctions.sendResult(res, error);
     }

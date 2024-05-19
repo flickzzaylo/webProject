@@ -35,6 +35,18 @@ exports.findByRoleId = (req,res) =>{
         globalFunctions.sendError(res,err);
     })
 }
+exports.findTeachers = async (req, res) => {
+    try {
+        const data = await User.findAll({
+            where: {
+                role_id: 1
+            }
+        })
+        globalFunctions.sendResult(res, data);
+    }catch (e){
+        globalFunctions.sendError(res,e);
+    }
+}
 
 exports.create = (req,res) =>{
     User.create({
@@ -81,3 +93,47 @@ exports.delete = (req,res) =>{
         globalFunctions.sendError(res,err);
     })
 }
+exports.teachersHasNotUser = (req,res) =>{
+    db.sequelize.query(
+        `SELECT user.id, user.password, user.login, user.role_id
+        FROM user
+        LEFT JOIN teacher ON user.id = teacher.user_id
+        WHERE teacher.id IS NULL AND role_id=1;`,
+        {
+            type: db.sequelize.QueryTypes.SELECT
+        })
+        .then(objects => {
+            globalFunctions.sendResult(res, objects);
+        })
+        .catch(err => {
+            globalFunctions.sendError(res, err);
+        })
+}
+
+exports.findRoleByUser = async (req,res)=>{
+    try{
+    const data = await db.sequelize.query(
+        `select user.role_id from user where user.login='${req.params.login}';`,
+        {
+            type: db.sequelize.QueryTypes.SELECT
+        }
+    )
+        // console.log(data);
+        globalFunctions.sendResult(res,data);
+    }catch(e){
+        globalFunctions.sendError(res,e);
+    }
+}
+
+exports.findIdByLogin = async(req,res)=>{
+    try{
+        const data = await db.sequelize.query(`select * from user where user.login='${req.params.login}'`,{
+            type: db.sequelize.QueryTypes.SELECT
+        })
+        console.log(data);
+        globalFunctions.sendResult(res,data);
+    }catch (e){
+        globalFunctions.sendError(res,e);
+    }
+}
+

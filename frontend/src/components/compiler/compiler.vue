@@ -1,29 +1,39 @@
 <template>
-        <h3>Компилятор</h3>
-        <a>Выберите язык программирования: </a>
-        <select v-model="selected">
-            <option v-for="(language,languageInput) in languages" :key="languageInput" :value="languageInput" >{{ language }}</option>
-        </select>
-        <br>
-        <br>
-        <a>Код программы:</a>
-        <br>
-        <textarea v-model="code" placeholder="Введите код" rows="20" max-rows="30" style="width:80%;resize: none;"></textarea>
-        <br>
-        <a>Входные данные</a>
-        <br>
-        <textarea v-model="input" rows="5" max-rows="15" style="width:50%;resize: none;" placeholder="Введите входные данные"></textarea>
-        <br>
-        <button v-on:click="compileCode()">Выполнить код</button>
-        <br>
-        <br>
-        <label id="answer" style="color: yellowgreen;">{{ output }}</label>
+  <div v-if="this.role===3" class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="text-center">
+          <h3 class="text-white mb-3" style="background-color: #007bff; padding: 10px;">Компилятор</h3>
+          <div class="form-group">
+            <label class="text-dark">Выберите язык программирования:</label>
+            <select v-model="selected" class="form-control form-control-dark">
+              <option value="" disabled selected>Выберите язык программирования</option>
+              <option  v-for="(language,languageInput) in languages" :key="languageInput" :value="languageInput" >{{ language }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="text-dark">Код программы:</label>
+            <textarea v-model="code" class="form-control form-control-dark" placeholder="Введите код" rows="20" max-rows="30" style="resize: none;"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="text-dark">Входные данные:</label>
+            <textarea v-model="input" class="form-control form-control-dark" placeholder="Введите входные данные" rows="5" max-rows="15" style="resize: none;"></textarea>
+          </div>
+          <button v-on:click="compileCode()" class="btn btn-primary btn-block">Выполнить код</button>
+          <br>
+          <h5 id="answer">{{ output }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import http from "../../http-common"
+import {userRole} from "@/mixins/currentUser";
     export default {
         name: "TheCompiler",
+      mixins: [userRole],
         data() {
             return {
                 languages:{
@@ -106,6 +116,22 @@ import http from "../../http-common"
                     }
                     );
             }
-        }
+        },
+      mounted() {
+          this.currentUserRole();
+      }
     };
 </script>
+
+<style>
+.form-control-dark {
+  background-color: aliceblue !important;
+  color: #000;
+  border-color: #6c757d;
+}
+
+.form-control-dark:focus {
+  border-color: #6c757d !important;
+  box-shadow: none !important;
+}
+</style>
